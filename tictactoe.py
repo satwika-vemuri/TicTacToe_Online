@@ -36,15 +36,40 @@ def make_move(turn, board):
         
 
 def current_game_state(board):
-    # all you satwika :^)
+    # board is a 3x3 multi dimensional array
     # Returns 0 if game is unfinished
     # 1 if player 1 wins, 2 for player 2
     # 3 is tie
-    return None
+    for(row in board):
+        for(col in board):
+            if ((board[row][col] != 0) and (board[row][col] != 1)):
+                return 0
 
-def detect_winner(board):
+    winner = 3
+    for row in board:
+        if(row[0] == row[1] == row[2]):
+            winner = row[0]
+
+    # check cols
+    for col in range(0, 3):
+        if(board[0][col] == board[1][col] == board[2][col]):
+            winner = board[0][col]
+    
+    # check left top diagonal
+    if(board[0][0] == board[1][1] == board[2][2]):
+        winner = board[0][0]
+
+    # check right top diagonal
+    if(board[0][2] == board[1][1] == board[2][0]):
+        winner = board[0][2]
+
+    return winner
+
+def detect_winner(board): # assumes that there is a winner
     # If player 1/2 wins, or tie.. :^(
-    return None
+    if(current_game_state(board) == 1):
+        return 1
+    return 2
 
 def run_game():
     board = board_set_up()
@@ -69,3 +94,5 @@ def run_game():
         print("Tie!")
             
 run_game()
+
+    
