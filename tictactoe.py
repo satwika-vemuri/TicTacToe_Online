@@ -51,37 +51,36 @@ def current_game_state(board):
     # Returns 0 if game is unfinished
     # 1 if player 1 wins, 2 for player 2
     # 3 is tie
-    
-    for row in range(len(board)):
-        for col in range(len(board)):
-            if ((board[row][col] != 0) and (board[row][col] != 1)):
-                return 0
 
-    winner = 3
+    ## Check for if there are any winners
     for row in board:
         if(row[0] == row[1] == row[2]):
+            print("stage 1")
             winner = row[0]
 
     # check cols
     for col in range(0, 3):
         if(board[0][col] == board[1][col] == board[2][col]):
-            winner = board[0][col]
+            print("stage 2")
+            return board[0][col]
     
     # check left top diagonal
     if(board[0][0] == board[1][1] == board[2][2]):
-        winner = board[0][0]
+        print("stage 3")
+        return board[0][0]
 
     # check right top diagonal
     if(board[0][2] == board[1][1] == board[2][0]):
-        winner = board[0][2]
+        print("stage 4")
+        return board[0][2]
 
-    return winner
-
-def detect_winner(board): # assumes that there is a winner
-    # If player 1/2 wins, or tie.. :^(
-    if(current_game_state(board) == 1):
-        return 1
-    return 2
+    ## If no winners, check if the game is unfinished
+    for row in range(len(board)):
+        for col in range(len(board)):
+            if ((board[row][col] != 1) and (board[row][col] != 2)):
+                print("stage 5")
+                return 0
+    return 3
 
 def run_game():
     board = board_set_up()
@@ -89,8 +88,8 @@ def run_game():
     turn = 1
     state = 0
     while (state == 0):
-        print(board)
         make_move(turn, board)
+        print(board)
 
         # Change turns
         if turn == 1:
@@ -99,6 +98,7 @@ def run_game():
             turn = 1
     
         state = current_game_state(board)
+        print(state)
     
     if state == 1:
         print("Player 1 wins!")
