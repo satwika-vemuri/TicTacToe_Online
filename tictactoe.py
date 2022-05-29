@@ -13,8 +13,12 @@ def board_set_up():
             row.append(0)
         board.append(row)
         
-    print(board)
-    
+    return board
+
+def is_move_valid(choice, board):
+    return board[choice[0]][choice[1]] == 0
+        
+
 # Player one represented by O
 def get_player_one_choice():
     # Get player one input: always a user 
@@ -29,9 +33,16 @@ def get_player_two_choice():
 def make_move(turn, board):
     if turn == 1:
         choice = get_player_one_choice()
+        
+
+        while not is_move_valid(choice, board):
+            choice = get_player_one_choice()
         board[choice[0]][choice[1]] = 1
     else:
         choice = get_player_two_choice()
+        
+        while not is_move_valid(choice, board):
+            choice = get_player_two_choice()
         board[choice[0]][choice[1]] = 2
         
 
@@ -40,8 +51,9 @@ def current_game_state(board):
     # Returns 0 if game is unfinished
     # 1 if player 1 wins, 2 for player 2
     # 3 is tie
-    for(row in board):
-        for(col in board):
+    
+    for row in range(len(board)):
+        for col in range(len(board)):
             if ((board[row][col] != 0) and (board[row][col] != 1)):
                 return 0
 
@@ -73,9 +85,11 @@ def detect_winner(board): # assumes that there is a winner
 
 def run_game():
     board = board_set_up()
+
     turn = 1
     state = 0
     while (state == 0):
+        print(board)
         make_move(turn, board)
 
         # Change turns
