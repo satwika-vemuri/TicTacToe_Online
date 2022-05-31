@@ -1,0 +1,27 @@
+{
+  "name": "tictactoe",
+  "version": "1.0.0",
+  "description": "An online tic-tac-toe application with two playing modes: one singleplayer game against an AI and a two-player game.",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node main.js",
+    "tailwind": "npx tailwindcss -i ./src/css/main.css -o ./public/main.css "
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/satwika-vemuri/TicTacToe.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/satwika-vemuri/TicTacToe/issues"
+  },
+  "homepage": "https://github.com/satwika-vemuri/TicTacToe#readme",
+  "dependencies": {
+    "express": "^4.18.1"
+  },
+  "devDependencies": {
+    "tailwindcss": "^3.0.24"
+  }
+}
