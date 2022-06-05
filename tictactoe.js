@@ -36,113 +36,84 @@ function get_player_two_choice(board) {
     -1 -- choosing this probably leads to a loss
     0 -- choosing this probably leads to a tie
     */
-    minimax_values(board);
-    /*
-    let arr = []
-
-    
-    const values = minimax_values(board)
-    // return the first 1
-    for(let r = 0; r < board.length; r++){
-        for(let c = 0; c < board[0].length; c++){
-            if(board[r][c] == 1){
-                arr.push(r);
-                arr.push(c);
-                return arr;
-            }
-
-        }
-    }
-
-    // return the first 0 if there are no 1s
-    for(let r = 0; r < board.length; r++){
-        for(let c = 0; c < board[0].length; c++){
-            if(board[r][c] == 0){
-                arr.push(r);
-                arr.push(c);
-                return arr;
-            }
-
-        }
-    }
-
-    // return the first -1 if there are no 0s
-    for(let r = 0; r < board.length; r++){
-        for(let c = 0; c < board[0].length; c++){
-            if(board[r][c] == -1){
-                arr.push(r);
-                arr.push(c);
-                return arr;
-            }
-
-        }
-    }
-    */
+    return get_next_move(board, 2, 1);
 }
-function minimax_values(board) {
-    // from player 2's perspective (so we want 2 to win)
-    var tree = {
-        board: board,
-        next_moves: open_moves(board),
-        isTerminal: false,
-        minimax_val: null
-    };
-    generateTree(board, tree, 2);
-    console.log(countLevels(tree, 0));
-    console.log(tree);
-}
-function countLevels(tree, counter) {
-    if (tree.next_moves.length == 0) {
-        return counter;
+// player 1 is min (X) and player 2 is max (O)
+function get_next_move(board, this_player, other_player) {
+    var minimax_values = [];
+    for (var i = 0; i < open_moves(board).length; i++) {
+        var newBoard = add_to_board(board, open_moves(board)[i], this_player);
+        var new_node = {
+            board: newBoard,
+            next_moves: open_moves(newBoard)
+        };
+        minimax_values.push(minimax(new_node, other_player));
     }
-    return (countLevels(tree.next_moves[0], counter + 1));
+    if (this_player == 1) {
+        return open_moves(board)[min_index(minimax_values)];
+    }
+    else { // player is 2
+        return open_moves(board)[max_index(minimax_values)];
+    }
 }
-// which player's turn it is
-function generateTree(board, tree, player) {
-    for (var i = 0; i < tree.next_moves.length; i++) {
-        var current = tree.next_moves[i]; // arr size two that contains the open space in the board that we're currently exploring
-        var newBoard = deep_copy(board);
-        newBoard[current[0]][current[1]] = player; // update newBoard with the most recent move
-        if (current_game_state(newBoard) == 0) { // not a terminal state (game can still continue)
-            var newTree = {
+// player 1 is min (X) and player 2 is max (O)
+function minimax(state_node, player) {
+    if (state_node.next_moves.length == 0) { // the board is full
+        if (current_game_state(state_node.board) == 1) {
+            return -1;
+        }
+        else if (current_game_state(state_node.board) == 2) {
+            return 1;
+        }
+        return 0;
+    }
+    else if (player == 1) { //min's turn
+        var vals = [];
+        for (var i = 0; i < state_node.next_moves.length; i++) {
+            var newBoard = add_to_board(state_node.board, state_node.next_moves[i], 1);
+            var new_node = {
                 board: newBoard,
-                next_moves: open_moves(newBoard),
-                isTerminal: false,
-                minimax_value: null
+                next_moves: open_moves(newBoard)
             };
-            if (player == 1) {
-                player = 2;
-            }
-            else {
-                player = 1;
-            }
-            tree.next_moves[i] = generateTree(newBoard, newTree, player);
+            vals.push(minimax(new_node, 2));
         }
-        else {
-            var winner = current_game_state(newBoard);
-            var minimax_val = void 0;
-            if (winner == 1) {
-                minimax_val = -1;
-            }
-            else if (winner == 2) {
-                minimax_val = 1;
-            }
-            else if (winner == 3) {
-                minimax_val = 0;
-            }
-            else { // game is unfinished
-                console.log("Your algorithm failed...");
-            }
-            console.log(minimax_val);
-            var newTree = {
+        return vals[min_index(vals)];
+    }
+    else if (player == 2) { //max's turn
+        var vals = [];
+        for (var i = 0; i < state_node.next_moves.length; i++) {
+            var newBoard = add_to_board(state_node.board, state_node.next_moves[i], 2);
+            var new_node = {
                 board: newBoard,
-                next_moves: open_moves(newBoard),
-                isTerminal: true,
-                minimax_value: minimax_val
+                next_moves: open_moves(newBoard)
             };
-            tree.next_moves[i] = newTree;
+            vals.push(minimax(new_node, 1));
+        }
+        return vals[max_index(vals)];
+    }
+}
+function add_to_board(board, position, value) {
+    var newBoard = deep_copy(board);
+    newBoard[position[0]][position[1]] = value;
+    return newBoard;
+}
+function min_index(vals) {
+    var min = 0;
+    for (var i = 0; i < vals.length; i++) {
+        if (vals[i] < vals[min]) {
+            min = i;
         }
     }
+    return min;
+}
+function max_index(vals) {
+    var max = 0;
+    for (var i = 0; i < vals.length; i++) {
+        if (vals[i] > vals[max]) {
+            max = i;
+        }
+    }
+    return max;
 }
 function deep_copy(board) {
     var newBoard = [[], [], []];
