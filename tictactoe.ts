@@ -21,29 +21,21 @@ function getRandomInt(min, max) {
     return Math.floor(Math.random() * (max - min) + min); 
 }
 
-// Player one represented by O
-function get_player_one_choice(){
-    // Get player one input: always a user 
-    // Set to random tempoarily
+// player 1  is X
+function get_player_choice(turn){
     let arr = []
     arr.push(getRandomInt(0, 3))
     arr.push(getRandomInt(0, 3))
     return arr;
 }
 
-function get_player_two_choice(board){
-    // AI generated
-    /*
-    will return a 3 by 3 array with the following values:
-    X -- space unavailable
-    1 -- choosing this probably lead to a victory
-    -1 -- choosing this probably leads to a loss
-    0 -- choosing this probably leads to a tie
-    */
-    
-    return get_next_move(board, 2, 1);
-    
-    
+function get_ai_choice(player, board){
+    if(player == 1){
+        return get_next_move(board, 1, 2);
+    }
+    else{
+        return get_next_move(board, 2, 1);
+    }
 }
 
 // player 1 is min (X) and player 2 is max (O)
@@ -164,24 +156,20 @@ function open_moves(board){
 }
 
 
-function make_move(turn, board){
-    if(turn == 1){
-        let choice = get_player_one_choice();
-        while(!(is_move_valid(choice, board))){
-            choice = get_player_one_choice();
-        }
-
-        board[choice[0]][choice[1]] = 1;
+function make_move(turn, isAI, board){
+    let choice;
+    if(isAI){
+        choice = get_ai_choice(turn, board);
     }
     else{
-        let choice = get_player_two_choice(board);
+        choice = get_player_choice(turn);
         while(!(is_move_valid(choice, board))){
-            choice = get_player_two_choice(board);
+            choice = get_player_choice(turn);
         }
-        board[choice[0]][choice[1]] = 2;
-
     }
-    return board
+    board[choice[0]][choice[1]] = turn;
+    return board;
+    
 }
 
 function current_game_state(board){
@@ -231,16 +219,19 @@ function run_game(){
     let board = board_set_up();
 
     let turn = 1;
+    let isAI = false;
     let state = 0;
     while(state == 0){
-        board = make_move(turn, board);
+        board = make_move(turn, isAI, board);
     
         //Change turn
         if(turn == 1){
             turn = 2;
+            isAI = false;
         }
         else{
             turn = 1;
+            isAI = true;
         }
 
         state = current_game_state(board)

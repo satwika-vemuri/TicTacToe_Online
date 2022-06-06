@@ -18,25 +18,20 @@ function getRandomInt(min, max) {
     max = Math.floor(max);
     return Math.floor(Math.random() * (max - min) + min);
 }
-// Player one represented by O
-function get_player_one_choice() {
-    // Get player one input: always a user 
-    // Set to random tempoarily
+// player 1  is X
+function get_player_choice(turn) {
     var arr = [];
     arr.push(getRandomInt(0, 3));
     arr.push(getRandomInt(0, 3));
     return arr;
 }
-function get_player_two_choice(board) {
-    // AI generated
-    /*
-    will return a 3 by 3 array with the following values:
-    X -- space unavailable
-    1 -- choosing this probably lead to a victory
-    -1 -- choosing this probably leads to a loss
-    0 -- choosing this probably leads to a tie
-    */
-    return get_next_move(board, 2, 1);
+function get_ai_choice(player, board) {
+    if (player == 1) {
+        return get_next_move(board, 1, 2);
+    }
+    else {
+        return get_next_move(board, 2, 1);
+    }
 }
 // player 1 is min (X) and player 2 is max (O)
 function get_next_move(board, this_player, other_player) {
@@ -140,21 +135,18 @@ function open_moves(board) {
     }
     return arr;
 }
-function make_move(turn, board) {
-    if (turn == 1) {
-        var choice = get_player_one_choice();
-        while (!(is_move_valid(choice, board))) {
-            choice = get_player_one_choice();
-        }
-        board[choice[0]][choice[1]] = 1;
+function make_move(turn, isAI, board) {
+    var choice;
+    if (isAI) {
+        choice = get_ai_choice(turn, board);
     }
     else {
-        var choice = get_player_two_choice(board);
+        choice = get_player_choice(turn);
         while (!(is_move_valid(choice, board))) {
-            choice = get_player_two_choice(board);
+            choice = get_player_choice(turn);
         }
-        board[choice[0]][choice[1]] = 2;
     }
+    board[choice[0]][choice[1]] = turn;
     return board;
 }
 function current_game_state(board) {
@@ -197,15 +189,18 @@ function current_game_state(board) {
 function run_game() {
     var board = board_set_up();
     var turn = 1;
+    var isAI = false;
     var state = 0;
     while (state == 0) {
-        board = make_move(turn, board);
+        board = make_move(turn, isAI, board);
         //Change turn
         if (turn == 1) {
             turn = 2;
+            isAI = true;
         }
         else {
             turn = 1;
+            isAI = false;
         }
         state = current_game_state(board);
         console.log(board);
