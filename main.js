@@ -1,5 +1,6 @@
 const express = require('express');
 const app = express();
+var path = require('path');
 const http = require('http');
 const server = http.createServer(app);
 
@@ -9,9 +10,8 @@ app.set('view engine', 'hbs');
 
 app.use(express.static('public'));
 
-app.get('/', (req, res) => {
-    res.sendFile('./src/html/index.html', {root: __dirname })
-});
+var indexRouter = require('./routes/index');
+app.use('/', indexRouter);
 
 server.listen(3000, () => {
   console.log('listening on *:3000');

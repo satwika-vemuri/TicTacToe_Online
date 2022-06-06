@@ -18,7 +18,9 @@
   },
   "homepage": "https://github.com/satwika-vemuri/TicTacToe#readme",
   "dependencies": {
-    "express": "^4.18.1"
+    "express": "^4.18.1",
+    "handlebars": "^4.7.7",
+    "hbs": "^4.2.0"
   },
   "devDependencies": {
     "css": "^3.0.0",
