@@ -1,1 +1,5 @@
-    <script src= {{js}}></script>
+
+{{#each styles}}
+  <link rel="stylesheet" href="/styles/{{this}}.css">
+<script src= {{js}}></script>
+{{/each}}
