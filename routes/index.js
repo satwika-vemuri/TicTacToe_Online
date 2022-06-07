@@ -20,7 +20,6 @@ module.exports = function(io) {
   });
 
   router.get('/multiplayer', function(req, res, next) {
-    
     res.render('board', { title: 'Multiplayer', style: "board",
     js: ["tictactoe",
     "singleplayer"]

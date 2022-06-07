@@ -8,12 +8,11 @@ app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'hbs');
 
 
-
-let io = require('socket.io' )
-
-
 app.use(express.static('public'));
 
+const io = require('socket.io')(server);
+
+// var roomManager = require('./public/js/roomManager')(server);
 var indexRouter = require('./routes/index')(io);
 app.use('/', indexRouter);
 
