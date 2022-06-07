@@ -4,18 +4,25 @@
 <script src= {{js}}></script>
 {{/each}}
 
-<div class="card mx-auto card-fit">
-      <table class="table table-bordered mx-auto table-responsive">
+
+<h1 >{{title}}</h1>
+
+<p><b>Wins</b></p>
+<p>Player 1 &#40;You&#41;: {{score.[0]}}</p>
+<p>Player 2:  {{score.[1]}}</p>
+
+<div class="card">
+      <table class="table table-bordered">
         {{#each board}}
-          <tr class="w-100">
-            <td class="w-auto">
+          <tr>
+            <td>
               {{this.[0]}}
             </td>
-            <td class="w-auto">
+            <td>
               {{this.[1]}}
 
             </td>
-            <td class="w-auto">
+            <td>
               {{this.[2]}}
             </td>
           </tr>
