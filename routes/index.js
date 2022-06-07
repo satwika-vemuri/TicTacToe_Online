@@ -12,9 +12,10 @@ module.exports = function(io) {
                           style: "board", 
                           js: ["tictactoe",
                               "singleplayer"],
-                          board: [["HELLO","HELLO", "HELLO"], 
-                                  ["HELLO", "HELLO", "HELLO"], 
-                                  ["HELLO","HELLO","HELLO"]]
+                          board: [["X","X", "X"], 
+                                  ["X", "X", "X"], 
+                                  ["X","X","X"]],
+                          score: [0, 0]
                       });
   });
 
