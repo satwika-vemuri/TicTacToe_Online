@@ -8,9 +8,13 @@ module.exports = function(io) {
   });
 
   router.get('/singleplayer', function(req, res, next) {
-    res.render('board', { title: 'Singleplayer', style: "board", 
-                        js: ["tictactoe",
-                              "singleplayer"]
+    res.render('board', { title: 'Singleplayer', 
+                          style: "board", 
+                          js: ["tictactoe",
+                              "singleplayer"],
+                          board: [["HELLO","HELLO", "HELLO"], 
+                                  ["HELLO", "HELLO", "HELLO"], 
+                                  ["HELLO","HELLO","HELLO"]]
                       });
   });
 

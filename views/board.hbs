@@ -3,3 +3,22 @@
   <link rel="stylesheet" href="/styles/{{this}}.css">
 <script src= {{js}}></script>
 {{/each}}
+
+<div class="card mx-auto card-fit">
+      <table class="table table-bordered mx-auto table-responsive">
+        {{#each board}}
+          <tr class="w-100">
+            <td class="w-auto">
+              {{this.[0]}}
+            </td>
+            <td class="w-auto">
+              {{this.[1]}}
+
+            </td>
+            <td class="w-auto">
+              {{this.[2]}}
+            </td>
+          </tr>
+        {{/each}}
+      </table>
+</div>
