@@ -1,4 +1,5 @@
 var express = require('express');
+console.log("starting!");
 
 module.exports = function(io) {
   var router = express.Router();
@@ -9,9 +10,9 @@ module.exports = function(io) {
 
   router.get('/singleplayer', function(req, res, next) {
     res.render('board', { title: 'Singleplayer', 
-                          style: "board", 
-                          js: ["tictactoe",
-                              "singleplayer"],
+                          styles: "board", 
+                          js: ["public&#92js&#92singleplayer.js",
+                              "public&#92js&#92tictactoe.js"],
                           board: [["X","X", "X"], 
                                   ["X", "X", "X"], 
                                   ["X","X","X"]],
@@ -20,7 +21,7 @@ module.exports = function(io) {
   });
 
   router.get('/multiplayer', function(req, res, next) {
-    res.render('board', { title: 'Multiplayer', style: "board",
+    res.render('board', { title: 'Multiplayer', styles: "board",
     js: ["tictactoe",
     "singleplayer"]
 });
