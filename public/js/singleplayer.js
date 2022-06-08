@@ -2,6 +2,7 @@ console.log("Running");
 
 var player = "O";
 var computer = "X";
+var boardArray = board_set_up();
 
 function setPlayer(player){
     player = player;
@@ -31,7 +32,7 @@ function setupGame(){
         var context = { title: 'Singleplayer', 
         styles: ["board"], 
         js: scripts,
-        board: board_set_up(),
+        board: boardArray,
         score: [0, 0]
         };
 
