@@ -1,7 +1,10 @@
 {{#each js}}
-   <script src={{this}}></script>
+   <script id="{{@key}}"src={{this}}></script>
 {{/each}}
 
+{{#each styles}}
+<link rel="stylesheet" href="/styles/{{this}}.css">
+{{/each}}
 
 <h1 >{{title}}</h1>
 
@@ -13,14 +16,14 @@
       <table class="table table-bordered">
         {{#each board}}
           <tr>
-            <td>
+            <td class="tile" onclick="tileClick([{{@index}},0])">
               <h1>{{this.[0]}}</h1>
             </td>
-            <td>
+            <td class="tile" onclick="tileClick([{{@index}},1])">
               <h1>{{this.[1]}}</h1>
 
             </td>
-            <td>
+            <td class="tile" onclick="tileClick([{{@index}},2])">
               <h1>{{this.[2]}}</h1>
             </td>
           </tr>

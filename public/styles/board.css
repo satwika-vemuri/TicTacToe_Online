@@ -40,3 +40,9 @@ p {
 td h1 {
     vertical-align: auto;
 }
+
+.tile:hover {
+
+    background-color: lightgray;
+}
+    

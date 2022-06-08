@@ -23,9 +23,14 @@ function setupGame(){
         var boardHbsFunction = Handlebars.compile(boardHbs);
 
         // data to insert into hbs
+
+        var scripts  = 
+            {tictactoe: "/js/tictactoe.js",
+            singleplayer: "/js/singleplayer.js"};
+
         var context = { title: 'Singleplayer', 
         styles: ["board"], 
-        js: ["/js/singleplayer.js", "/js/tictactoe.js"],
+        js: scripts,
         board: board_set_up(),
         score: [0, 0]
         };
@@ -34,9 +39,10 @@ function setupGame(){
         var board =  boardHbsFunction(context);
 
         // replace playerChoose content in main with board content
-        console.log(board);
-        console.log($(this));
-        console.log($(this).parent());
-        $(this).parent().text = board;   
+        $("#singleplayer").parent().html(board);  
     });
+}
+
+function tileClick(clickedTile){
+    console.log("Tile clicked! " + clickedTile);
 }
