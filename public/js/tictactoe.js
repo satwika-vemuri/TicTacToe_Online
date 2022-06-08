@@ -1,3 +1,4 @@
+
 function board_set_up() {
     var board = [];
     for (var i = 0; i < 3; i++) {
@@ -215,4 +216,3 @@ function run_game() {
         console.log("Tie!");
     }
 }
-run_game();

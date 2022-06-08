@@ -23,7 +23,7 @@ if (cluster.isMaster) {
   const server = http.createServer(app);
 
 
-  app.set('views', path.join(__dirname, 'views'));
+  app.set('views', path.join(__dirname, '/public/views'));
   app.set('view engine', 'hbs');
 
 

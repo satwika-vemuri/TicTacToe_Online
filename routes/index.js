@@ -7,15 +7,7 @@ router.get('/', function(req, res, next) {
 });
 
 router.get('/singleplayer', function(req, res, next) {
-  res.render('board', { title: 'Singleplayer', 
-                      styles: ["board"], 
-                      js: ["/js/singeplayer.js",
-                          "/js/tictactoe.js"],
-                      board: [["X","X", "X"], 
-                              ["X", "X", "X"], 
-                              ["X","X","X"]],
-                      score: [0, 0]
-                      });
+  res.render('playerChoose', {js:["/js/singleplayer.js", "/js/tictactoe.js"]});
 });
 
 router.get('/multiplayer', function(req, res, next) {
