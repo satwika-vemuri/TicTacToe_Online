@@ -1,22 +1,45 @@
 const express = require('express');
-const app = express();
-var path = require('path');
-const http = require('http');
-const server = http.createServer(app);
+const port = 3000;
+const cluster = require("cluster");
+const numCPUs = require("os").cpus().length;
 
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'hbs');
+if (cluster.isMaster) {
+  console.log(`Number of CPUs is ${numCPUs}`);
+  console.log(`Master ${process.pid} is running`);
+
+  for (let i = 0; i < numCPUs; i++) {
+    cluster.fork();
+  }
+
+  cluster.on("exit", (worker, code, signal) => {
+    console.log(`worker ${worker.process.pid} died`);
+    console.log("New worker forked");
+    cluster.fork();
+  });
+} else {
+  const app = express();
+  var path = require('path');
+  const http = require('http');
+  const server = http.createServer(app);
 
 
-app.use(express.static('public'));
-
-const io = require('socket.io')(server);
-
-// var roomManager = require('./public/js/roomManager')(server);
-var indexRouter = require('./routes/index')(io);
-app.use('/', indexRouter);
+  app.set('views', path.join(__dirname, 'views'));
+  app.set('view engine', 'hbs');
 
 
-server.listen(3000, () => {
-  console.log('listening on *:3000');
-});
+  app.use(express.static('public'));
+
+  var indexRouter = require('./routes/index');
+  app.use('/', indexRouter);
+
+  const io = require('socket.io')(server);
+
+  io.of("/multiplayer").on("connection", function (socket) {
+      console.log('a user connected');
+
+  });
+
+
+  server.listen(port);
+}
+

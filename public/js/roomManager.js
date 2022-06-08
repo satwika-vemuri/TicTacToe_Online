@@ -1,18 +1,11 @@
-const io = require('socket.io')(server);
+export function roomManager(server) {
+    const io = require('socket.io')(server);
 
-const roomNames = new Set();
-const roomsWaiting = [];
-const roomsFull = [];
-
-io.on('connection', (socket) => {
-    console.log('a user connected');
-    socket.on('disconnect', () => {
-      console.log('user disconnected');
+    io.of("/multiplayer").on("connection", function (socket) {
+        console.log('a user connected');
+    
     });
-    socket.on('room', (create) => {
-        if (create === true) {
-            socket.join(roomNames.size + 1);
-        }
-    });
-});
 
+
+    return io;
+}
