@@ -53,7 +53,7 @@ function setupGame(){
 
         // insert data into hbs 
         var board =  boardHbsFunction(context);
-        // replace playerChoose content in main with board content
+        // replace singleplayerChoose content in main with board content
         $("#singleplayer").parent().html(board);  
         playerPause = false;
     });

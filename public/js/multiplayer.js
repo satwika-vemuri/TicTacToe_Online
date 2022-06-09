@@ -47,7 +47,7 @@ function setupGame(){
         // insert data into hbs 
         var board =  boardHbsFunction(context);
 
-        // replace singeplayerChoose content in main with board content
+        // replace multiplayerChoose content in main with board content
         $("#multiplayer").parent().html(board);
 
         // Once O joins room, player X can make a move

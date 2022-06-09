@@ -1,0 +1,13 @@
+{{#each js}}
+   <script id="{{@key}}"src={{this}}></script>
+{{/each}}
+
+
+<div class="card">
+  <div class="card-body">
+    <h1>Choose your Player!</h1>
+    <p> Please select 'X' or 'O'.</p>
+    <button type="button" class="btn btn-primary" onclick="setPlayer('X')">X</button>
+    <button type="button" class="btn btn-primary" onclick="setPlayer('O')">O</button>
+  </div>
+</div>
