@@ -9,21 +9,21 @@
 <h1 >{{title}}</h1>
 
 <p><b>Wins</b></p>
-<p>X Wins: {{score.[0]}}</p>
-<p>O Wins:  {{score.[1]}}</p>
+<p id = "xscore">X Wins: {{score.[0]}}</p>
+<p id = "oscore">O Wins:  {{score.[1]}}</p>
 
 <div class="card">
       <table class="table table-bordered">
         {{#each board}}
           <tr>
-            <td class="tile" onclick="tileClick([{{@index}},0])">
+            <td class="tile" onclick="tileClick([{{@index}},0])" id="{{@index}}0">
               <h1>{{this.[0]}}</h1>
             </td>
-            <td class="tile" onclick="tileClick([{{@index}},1])">
+            <td class="tile" onclick="tileClick([{{@index}},1])" id="{{@index}}1">
               <h1>{{this.[1]}}</h1>
 
             </td>
-            <td class="tile" onclick="tileClick([{{@index}},2])">
+            <td class="tile" onclick="tileClick([{{@index}},2])" id="{{@index}}2">
               <h1>{{this.[2]}}</h1>
             </td>
           </tr>

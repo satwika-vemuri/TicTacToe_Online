@@ -168,7 +168,7 @@ function make_move(turn, isAI, givenChoice, board){
     console.log(choice);
     board[choice[0]][choice[1]] = turn;
     console.log(board);
-    return board;
+    return [board, choice];
     
 }
 
@@ -215,38 +215,38 @@ function current_game_state(board){
     return 3;
 }
 
-function run_game(){
-    let board = board_set_up();
+// function run_game(){
+//     let board = board_set_up();
 
-    let turn = 1;
-    let isAI = false;
-    let state = 0;
-    while(state == 0){
-        board = make_move(turn, isAI, choice, board);
+//     let turn = 1;
+//     let isAI = false;
+//     let state = 0;
+//     while(state == 0){
+//         board = make_move(turn, isAI, choice, board);
     
-        //Change turn
-        if(turn == 1){
-            turn = 2;
-            isAI = false;
-        }
-        else{
-            turn = 1;
-            isAI = true;
-        }
+//         //Change turn
+//         if(turn == 1){
+//             turn = 2;
+//             isAI = false;
+//         }
+//         else{
+//             turn = 1;
+//             isAI = true;
+//         }
 
-        state = current_game_state(board)
-        console.log(board);
-    }
+//         state = current_game_state(board)
+//         console.log(board);
+//     }
 
-    if (state == 1){ 
-        console.log("Player 1 wins!");
-    }
-    else if (state == 2){
-        console.log("Player 2 wins!");
-    }
-    else{ 
-        console.log("Tie!");
-    }
-}
+//     if (state == 1){ 
+//         console.log("Player 1 wins!");
+//     }
+//     else if (state == 2){
+//         console.log("Player 2 wins!");
+//     }
+//     else{ 
+//         console.log("Tie!");
+//     }
+// }
          
 

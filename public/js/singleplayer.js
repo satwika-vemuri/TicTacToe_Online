@@ -34,7 +34,7 @@ function setupGame(){
             singleplayer: "/js/singleplayer.js"};
         
             if(player == "O"){
-                boardArray = make_move(1, true, null, boardArray);
+                boardArray = make_move(1, true, null, boardArray)[0];
             }
 
         var context = { title: 'Singleplayer', 
@@ -67,76 +67,48 @@ function tileClick(clickedTile){
     }
     //player goes
     if(current_game_state(boardArray) == 0){
-        boardArray = make_move(thisPlayer, false, clickedTile, boardArray);
-        update_board(boardArray, score);
+        boardArray = make_move(thisPlayer, false, clickedTile, boardArray)[0];
+        update_board(clickedTile, player);
     }
     else{
-        score = update_score(boardArray, score);
-        update_board(boardArray, score);
-        //setPlayer(player);
+        update_score();
     }
+
     //ai goes
     if(current_game_state(boardArray) == 0){ 
-        boardArray = make_move(otherPlayer, true, null, boardArray);
-        update_board(boardArray, score);
+        let aiMove = make_move(otherPlayer, true, null, boardArray);
+        boardArray = aiMove[0]
+        update_board(aiMove[1], computer);
     }
     else{
-        score = update_score(boardArray, score);
-        update_board(boardArray, score);
-        //setPlayer(player);
+        update_score();
     }
+
     if(current_game_state(boardArray) != 0){ 
-        score = update_score(boardArray, score);
-        update_board(boardArray, score);
-        //setPlayer(player);
+        update_score();
     }
-
-
 }
 
-function update_score(boardArray, score){
+function update_score(){
     x_score = score[0];
     o_score = score[1];
     if(current_game_state(boardArray) == 1){
         x_score += 1;
+        const xscore = document.getElementById("xscore");
+        xscore.innerHTML = `X Wins: ${x_score}`;
     }
     else if(current_game_state(boardArray) == 2){
         o_score += 1;
+        const oscore = document.getElementById("oscore");
+        oscore.innerHTML = `O Wins: ${o_score}`;
     }
-    let arr1 = [];
-    arr1.push(x_score);
-    arr1.push(o_score);
-    return arr1;
+    score[0] = x_score;
+    score[1] = o_score;
 }
 
-function update_board(boardArray, score){
-    var boardHbs;
-    $.get("/../views/board.hbs",function( boardHbsFile){
-        boardHbs = boardHbsFile;
-
-        // convert hbs file to function
-        var boardHbsFunction = Handlebars.compile(boardHbs);
-
-        // data to insert into hbs
-
-        var scripts  = 
-            {tictactoe: "/js/tictactoe.js",
-            singleplayer: "/js/singleplayer.js"};
-
-        var context = { title: 'Singleplayer', 
-        styles: ["board"], 
-        js: scripts,
-        board: toLetters(boardArray),
-        score: score
-        };
-
-        // insert data into hbs 
-        var board =  boardHbsFunction(context);
-        console.log(board);
-
-        // replace playerChoose content in main with board content
-        $("#singleplayer").parent().html(board);  
-    });
+function update_board(clickedTile, player){
+    const element = document.getElementById(`${clickedTile[0]}${clickedTile[1]}`);
+    element.textContent = player;
 }
 
 function toLetters(boardArray){
