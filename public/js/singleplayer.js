@@ -6,7 +6,7 @@ var boardArray;
 var score;
 var turn;
 var letterToNumber = {"X": 1, "O":2};
-var inProgress;
+var playerPause;
 
 function setPlayer(choice){
     boardArray = board_set_up();
@@ -49,17 +49,19 @@ function setupGame(){
 
         // insert data into hbs 
         var board =  boardHbsFunction(context);
-
         // replace playerChoose content in main with board content
         $("#singleplayer").parent().html(board);  
+        playerPause = false;
     });
 }
 
 function tileClick(clickedTile){
-    console.log("In progress: " + inProgress);
-    if (!inProgress){
-        if(current_game_state(boardArray) == 0){ // if game is unfinished
-            inProgress = true;
+    console.log("In progress: " + playerPause);
+    if (!playerPause){
+        if(current_game_state(boardArray) == 0 // if game is unfinished
+            && boardArray[clickedTile[0]][clickedTile[1]] == 0) // if clicked tile is empty
+            { 
+            playerPause = true;
             console.log("inProgress should be true");
             // PLAYER'S TURN
             //player makes move
@@ -86,7 +88,7 @@ function tileClick(clickedTile){
                     // wait for animation before inProgress false
                     var delayInMilliseconds =  250;
                     setTimeout(function() {
-                        inProgress= false;
+                        playerPause= false;
                     }, delayInMilliseconds);
 
                     if(current_game_state(boardArray) != 0){ 
@@ -110,6 +112,7 @@ function tileClick(clickedTile){
 }
 
 function game_over(status){
+    playerPause = true;
     update_score();
 
     // satwika writes the rest!
