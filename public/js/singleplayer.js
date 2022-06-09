@@ -17,6 +17,9 @@ function setPlayer(choice){
     if (choice == "X"){
         computer = "O";
     }
+    else{
+        computer = "X";
+    }
     
     setupGame();
 }
@@ -62,7 +65,6 @@ function tileClick(clickedTile){
             && boardArray[clickedTile[0]][clickedTile[1]] == 0) // if clicked tile is empty
             { 
             playerPause = true;
-            console.log("inProgress should be true");
             // PLAYER'S TURN
             //player makes move
             console.log("Player: " + player);
@@ -97,13 +99,13 @@ function tileClick(clickedTile){
                 }, delayInMilliseconds);
             }
             else {
-                game_over(current_game_state(boardrray));
+                game_over(current_game_state(boardArray));
             }
             
         }
         else{
             //game is finished
-            game_over(current_game_state(boardrray));
+            game_over(current_game_state(boardArray));
         }
     }
     else{
@@ -114,8 +116,31 @@ function tileClick(clickedTile){
 function game_over(status){
     playerPause = true;
     update_score();
+    console.log("here");
 
-    // satwika writes the rest!
+    var gameOverHbs;
+    $.get("/../views/gameOver.hbs",function(gameOverHbsFile){
+        gameOverHbs = gameOverHbsFile;
+
+        // convert hbs file to function
+        var gameOverHbsFunction = Handlebars.compile(gameOverHbs);
+
+        // data to insert into hbs
+
+        var scripts  = 
+            {singleplayer: "/js/singleplayer.js"};
+
+        var context = { title: 'Gameover', 
+        styles: ["gameOver"], 
+        js: scripts,
+        };
+
+        // insert data into hbs 
+        var gameOver =  gameOverHbsFunction(context);
+
+        // replace playerChoose content in main with board content
+        $("#singleplayer").parent().html(gameOver);  
+    });
 }
 
 function update_score(){
