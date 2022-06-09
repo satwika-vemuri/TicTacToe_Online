@@ -4,6 +4,9 @@ var player;
 var computer;
 var boardArray;
 var score;
+var turn;
+var letterToNumber = {"X": 1, "O":2};
+var inProgress;
 
 function setPlayer(choice){
     boardArray = board_set_up();
@@ -53,44 +56,63 @@ function setupGame(){
 }
 
 function tileClick(clickedTile){
-    console.log("Tile clicked! " + clickedTile);
-    console.log(player);
-    let thisPlayer;
-    let otherPlayer;
-    if(player == "X"){
-        thisPlayer = 1;
-        otherPlayer = 2;
-    }
-    else{
-        thisPlayer = 2;
-        otherPlayer = 1;
-    }
-    //player goes
-    if(current_game_state(boardArray) == 0){
-        boardArray = make_move(thisPlayer, false, clickedTile, boardArray)[0];
-        update_board(clickedTile, player);
-    }
-    else{
-        update_score();
-    }
+    console.log("In progress: " + inProgress);
+    if (!inProgress){
+        if(current_game_state(boardArray) == 0){ // if game is unfinished
+            inProgress = true;
+            console.log("inProgress should be true");
+            // PLAYER'S TURN
+            //player makes move
+            console.log("Player: " + player);
+            console.log("Computer: " + computer);
+            console.log("Letter to number player" + letterToNumber[player]);
+            console.log("Letter to number computer" + letterToNumber[computer]);
+    
+            boardArray = make_move(letterToNumber[player], false, clickedTile, boardArray)[0];
+            update_board(clickedTile, player);
+    
+            if (current_game_state(boardArray) ==0){ // if game is unfinished
+                // AI'S TURN
+    
+                // delay ai's turn in order to simulate thinking
+                var delayInMilliseconds = Math.floor(Math.random() * (700 - 300) + 300);
+                setTimeout(function() {
+                    
+                    //ai makes move
+                    let aiMove = make_move(letterToNumber[computer], true, null, boardArray);
+                    boardArray = aiMove[0]
+                    update_board(aiMove[1], computer);
+                    
+                    // wait for animation before inProgress false
+                    var delayInMilliseconds =  250;
+                    setTimeout(function() {
+                        inProgress= false;
+                    }, delayInMilliseconds);
 
-    var delayInMilliseconds = Math.floor(Math.random() * (700 - 300) + 300);; //1 second
-
-    setTimeout(function() {
-        //ai goes
-        if(current_game_state(boardArray) == 0){ 
-            let aiMove = make_move(otherPlayer, true, null, boardArray);
-            boardArray = aiMove[0]
-            update_board(aiMove[1], computer);
+                    if(current_game_state(boardArray) != 0){ 
+                        game_over(current_game_state(boardArray))
+                    }
+                }, delayInMilliseconds);
+            }
+            else {
+                game_over(current_game_state(boardrray));
+            }
+            
         }
         else{
-            update_score();
+            //game is finished
+            game_over(current_game_state(boardrray));
         }
-    
-        if(current_game_state(boardArray) != 0){ 
-            update_score();
-        }
-    }, delayInMilliseconds);
+    }
+    else{
+        console.log('in progress');
+    }
+}
+
+function game_over(status){
+    update_score();
+
+    // satwika writes the rest!
 }
 
 function update_score(){
@@ -113,6 +135,7 @@ function update_score(){
 function update_board(clickedTile, player){
     const element = document.getElementById(`${clickedTile[0]}${clickedTile[1]}`);
     element.textContent = player;
+    element.style.animation = "fadeInOpacity .25s 1 ease-in";
 }
 
 function toLetters(boardArray){
