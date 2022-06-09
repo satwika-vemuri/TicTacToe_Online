@@ -9,9 +9,6 @@ var letterToNumber = {"X": 1, "O":2};
 var playerPause;
 
 function setPlayer(choice){
-    boardArray = board_set_up();
-    console.log(choice);
-    console.log("setting player!")
     player = choice;
     score = [0, 0];
     if (choice == "X"){
@@ -28,6 +25,7 @@ function setupGame(){
     // get board hbs file from server and set to variable
     var boardHbs;
 
+    boardArray = board_set_up();
     $.get("/../views/board.hbs",function( boardHbsFile){
         boardHbs = boardHbsFile;
 
@@ -128,19 +126,27 @@ function game_over(status){
 
         // data to insert into hbs
 
-        var scripts  = 
-            {singleplayer: "/js/singleplayer.js"};
+        var gameMessage;
+        if (status==0){
+            gameMessage= "Tie!";
+        }
+        else if (status ===  letterToNumber[player]){ 
+            gameMessage =  "You win!";
+        }
+        else {
+            gameMessage = "You lost!";
+        }
 
         var context = { title: 'Gameover', 
         styles: ["gameOver"], 
-        js: scripts,
+        message: gameMessage,
         };
 
         // insert data into hbs 
         var gameOver =  gameOverHbsFunction(context);
 
         // replace playerChoose content in main with board content
-        $("#singleplayer").parent().html(gameOver);  
+        $("#popup").html(gameOver);  
     });
 }
 
