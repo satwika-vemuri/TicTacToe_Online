@@ -21,14 +21,6 @@ function getRandomInt(min, max) {
     return Math.floor(Math.random() * (max - min) + min); 
 }
 
-// player 1  is X
-function get_player_choice(turn){
-    let arr = []
-    arr.push(getRandomInt(0, 3))
-    arr.push(getRandomInt(0, 3))
-    return arr;
-}
-
 function get_ai_choice(player, board){
     if(player == 1){
         return get_next_move(board, 1, 2);
@@ -156,18 +148,26 @@ function open_moves(board){
 }
 
 
-function make_move(turn, isAI, board){
+// givenChoice has a two value array if the player clicked a tile 
+function make_move(turn, isAI, givenChoice, board){
+    console.log(board);
+    console.log("Trying to make move");
     let choice;
     if(isAI){
         choice = get_ai_choice(turn, board);
     }
     else{
-        choice = get_player_choice(turn);
+        choice = givenChoice
+        /*
         while(!(is_move_valid(choice, board))){
             choice = get_player_choice(turn);
         }
+        */
     }
+    console.log(board);
+    console.log(choice);
     board[choice[0]][choice[1]] = turn;
+    console.log(board);
     return board;
     
 }
@@ -222,7 +222,7 @@ function run_game(){
     let isAI = false;
     let state = 0;
     while(state == 0){
-        board = make_move(turn, isAI, board);
+        board = make_move(turn, isAI, choice, board);
     
         //Change turn
         if(turn == 1){
@@ -248,5 +248,5 @@ function run_game(){
         console.log("Tie!");
     }
 }
-            
-run_game()
+         
+
