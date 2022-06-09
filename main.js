@@ -33,10 +33,22 @@ if (cluster.isMaster) {
   app.use('/', indexRouter);
 
   const io = require('socket.io')(server);
+  const mult = io.of("/multiplayer");
 
-  io.of("/multiplayer").on("connection", function (socket) {
-      console.log('a user connected');
+  mult.on("connection", (socket) => {
+    console.log("A user has connected!");
+    socket.on('disconnect', () => {
+      console.log('disconnected!!');
+    });
 
+    socket.on('join', () => {
+      console.log('joined!!!');
+    });
+
+    socket.on('create', () => {
+      console.log(socket.id);
+      socket.join(socket.id);
+    });
   });
 
 
