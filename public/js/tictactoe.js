@@ -1,3 +1,4 @@
+// creates an empty board filled with 0s (empty spaces)
 function board_set_up(){
     const board = [];
     for(let i = 0; i < 3; i++){
@@ -10,7 +11,8 @@ function board_set_up(){
     return board;
 }
 
-function is_move_valid(choice, board){
+// Checks for empty tile
+function isMoveValid(choice, board){
     return (board[choice[0]][choice[1]] == 0);
 }
 

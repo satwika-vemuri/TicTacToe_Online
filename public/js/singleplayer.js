@@ -27,6 +27,7 @@ function setPlayer(choice){
 function setupGame(){
     // get board hbs file from server and set to variable
     var boardHbs;
+
     $.get("/../views/board.hbs",function( boardHbsFile){
         boardHbs = boardHbsFile;
 
@@ -62,7 +63,7 @@ function tileClick(clickedTile){
     console.log("In progress: " + playerPause);
     if (!playerPause){
         if(current_game_state(boardArray) == 0 // if game is unfinished
-            && boardArray[clickedTile[0]][clickedTile[1]] == 0) // if clicked tile is empty
+            && isMoveValid(clickedTile, boardArray)) // if clicked tile is empty
             { 
             playerPause = true;
             // PLAYER'S TURN

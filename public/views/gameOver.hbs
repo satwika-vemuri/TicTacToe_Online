@@ -1,0 +1,13 @@
+{{#each js}}
+   <script id="{{@key}}"src={{this}}></script>
+{{/each}}
+
+
+<div class="card">
+  <div class="card-body">
+    <h1>Game over!</h1>
+    <p> Play again?</p>
+    <button type="button" class="btn btn-primary" onclick="setupGame()">Yes</button>
+    <button type="button" class="btn btn-primary" onclick="closeGameOver()">No</button>
+  </div>
+</div>
