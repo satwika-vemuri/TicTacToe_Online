@@ -74,19 +74,23 @@ function tileClick(clickedTile){
         update_score();
     }
 
-    //ai goes
-    if(current_game_state(boardArray) == 0){ 
-        let aiMove = make_move(otherPlayer, true, null, boardArray);
-        boardArray = aiMove[0]
-        update_board(aiMove[1], computer);
-    }
-    else{
-        update_score();
-    }
+    var delayInMilliseconds = Math.floor(Math.random() * (700 - 300) + 300);; //1 second
 
-    if(current_game_state(boardArray) != 0){ 
-        update_score();
-    }
+    setTimeout(function() {
+        //ai goes
+        if(current_game_state(boardArray) == 0){ 
+            let aiMove = make_move(otherPlayer, true, null, boardArray);
+            boardArray = aiMove[0]
+            update_board(aiMove[1], computer);
+        }
+        else{
+            update_score();
+        }
+    
+        if(current_game_state(boardArray) != 0){ 
+            update_score();
+        }
+    }, delayInMilliseconds);
 }
 
 function update_score(){
