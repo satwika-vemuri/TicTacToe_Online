@@ -1,23 +1,49 @@
-
 var socket;
 var connected;
 var player;
+var numOpenRooms;
+var isTurn = false;
+var room;
+
+// This socket instance is for room number updates in menu
+// NOT for gameplay
+// socket =  io(":3000/multiplayer");
+
+// socket.on("update_count", (numRooms) => {
+//     numOpenRooms = numRooms;
+//     const roomsTracker = document.getElementById("numRooms");
+//     roomsTracker.textContent = `Open Rooms: ${numRooms}`;
+// });
+
+// socket.emit("get_count");
+
+socket.on("update_room", (roomid) => {
+    console.log(roomid);
+    room = roomid;
+});
+
+socket.on("HELLO", () => {
+    console.log("HELLO");
+});
 
 function makeChoice(choice){
-    console.log(choice);
-    if (!connected) {
-        connected = true;
-        socket =  io(":3000/multiplayer");
-    }
-
-    if (choice == "create") {
-        player = "X";
-    } else {
-        player = "O";
-    }
-    socket.emit(choice);
-    setupGame();
-
+    // if (!(numOpenRooms == 0 && choice == "join")) {
+        // socket.disconnect();
+        console.log(choice);
+        if (!connected) {
+            connected = true;
+            socket =  io(":3000/multiplayer");
+        }
+    
+        if (choice == "create") {
+            player = "X";
+            room = socket.id;
+        } else {
+            player = "O";
+        }
+        socket.emit(choice);
+        setupGame();
+    // }
 }
 
 
@@ -39,7 +65,6 @@ function setupGame(){
 
         var context = { title: 'Multiplayer', 
         styles: ["board"], 
-        js: scripts,
         board: toLetters(boardArray),
         score: [0, 0]
         };
@@ -52,7 +77,7 @@ function setupGame(){
 
         // Once O joins room, player X can make a move
         if (player == "O") {
-            socket.emit("start");
+            socket.emit("xturn");
         }
     });
 }
@@ -77,42 +102,6 @@ function toLetters(boardArray){
 }
 
 function tileClick(clickedTile){
-    console.log("Tile clicked! " + clickedTile);
-    console.log(player);
-    let thisPlayer;
-    let otherPlayer;
-    if(player == "X"){
-        thisPlayer = 1;
-        otherPlayer = 2;
-    }
-    else{
-        thisPlayer = 2;
-        otherPlayer = 1;
-    }
-    //player goes
-    if(current_game_state(boardArray) == 0){
-        boardArray = make_move(thisPlayer, false, clickedTile, boardArray)[0];
-        update_board(clickedTile, player);
-    }
-    else{
-        update_score();
-    }
 
-    var delayInMilliseconds = Math.floor(Math.random() * (700 - 300) + 300);; //1 second
 
-    setTimeout(function() {
-        //ai goes
-        if(current_game_state(boardArray) == 0){ 
-            let aiMove = make_move(otherPlayer, true, null, boardArray);
-            boardArray = aiMove[0]
-            update_board(aiMove[1], computer);
-        }
-        else{
-            update_score();
-        }
-    
-        if(current_game_state(boardArray) != 0){ 
-            update_score();
-        }
-    }, delayInMilliseconds);
 }

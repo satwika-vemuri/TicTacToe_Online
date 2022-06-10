@@ -212,39 +212,3 @@ function current_game_state(board){
     }
     return 3;
 }
-
-// function run_game(){
-//     let board = board_set_up();
-
-//     let turn = 1;
-//     let isAI = false;
-//     let state = 0;
-//     while(state == 0){
-//         board = make_move(turn, isAI, choice, board);
-    
-//         //Change turn
-//         if(turn == 1){
-//             turn = 2;
-//             isAI = false;
-//         }
-//         else{
-//             turn = 1;
-//             isAI = true;
-//         }
-
-//         state = current_game_state(board)
-//         console.log(board);
-//     }
-
-//     if (state == 1){ 
-//         return "X wins!";
-//     }
-//     else if (state == 2){
-//         return "O wins!";
-//     }
-//     else{ 
-//         return "Tie!";
-//     }
-// }
-         
-

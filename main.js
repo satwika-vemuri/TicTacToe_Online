@@ -35,19 +35,40 @@ if (cluster.isMaster) {
   const io = require('socket.io')(server);
   const mult = io.of("/multiplayer");
 
+  var socketsWaiting = [];
+
   mult.on("connection", (socket) => {
     console.log("A user has connected!");
+
     socket.on('disconnect', () => {
-      console.log('disconnected!!');
+      console.log('disconnected!');
     });
 
     socket.on('join', () => {
-      console.log('joined!!!');
+      var room = socketsWaiting.shift();
+      console.log(room);
+      socket.join(room);
+      mult.to(room).emit("HELLO");
+
+      io.to(room).emit("update_room", room);
+      // mult.emit("update_count", socketsWaiting.length)
+
     });
 
     socket.on('create', () => {
-      console.log(socket.id);
-      socket.join(socket.id);
+      socketsWaiting.push(socket.id + "'s Room");
+      room = socket.id + "'s Room"
+
+      socket.join(room);
+      console.log(room);
+
+      // mult.emit("update_count", socketsWaiting.length);
+      
+    });
+
+    socket.on('get_count', () => {
+      mult.emit("update_count", socketsWaiting.length);
+      
     });
   });
 
