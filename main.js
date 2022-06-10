@@ -73,6 +73,12 @@ if (cluster.isMaster) {
       // Returns number of sockets waiting to be connected ("rooms")
       mult.emit("update_count", socketsWaiting.length);
     });
+
+    socket.on("made_move", (clickedTile, player_symbol, oppId, isGameOver) => {
+      // Tells players to update boards based upon newly made move
+      // Tells next player to go or not based on state of game
+      mult.to(socket.id).to(oppId).emit("update_board", clickedTile, player_symbol);
+    });
   });
 }
 

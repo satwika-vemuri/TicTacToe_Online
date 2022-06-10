@@ -3,6 +3,9 @@ var isTurn = false;
 var numRooms = 0;
 const socket = io(":3000/multiplayer");
 
+var boardArray;
+
+
 socket.emit("get_count");
 
 socket.on("connect_error", (err) => {
@@ -27,7 +30,11 @@ socket.on("start_game", (oppId) => {
 
 socket.on("your_turn", () => {
     isTurn = true;
-};)
+});
+
+socket.on("update_board", (clickedTile, symbol) => {
+    update_board(clickedTile, symbol);
+});
 
 function makeChoice(choice){
     if (choice == "create") {
@@ -68,9 +75,6 @@ function setupGame(){
         $(".card").html(board);
 
         // Once O joins room, player X can make a move
-        if (player == "O") {
-            socket.emit("xturn");
-        }
     });
 }
 
@@ -94,13 +98,15 @@ function toLetters(boardArray){
 
 function tileClick(clickedTile){
     if (isTurn) {
-        update_board(clickedTile);
+        socket.emit("made_move", clickedTile, player, opponent, false);
+        isTurn = false;
     }
 
 }
 
-function update_board(clickedTile){
+function update_board(clickedTile, symbol){
+    boardArray[clickedTile[0]][clickedTile[1]] = symbol;
     const element = document.getElementById(`${clickedTile[0]}${clickedTile[1]}`);
-    element.innerHTML = "<h1 class=\"fade-in\">" + player + "</h1>";
+    element.innerHTML = "<h1 class=\"fade-in\">" + symbol + "</h1>";
     element.style.animation = "fadeInOpacity .25s 1 ease-in";
 }
