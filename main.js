@@ -21,7 +21,7 @@ if (cluster.isMaster) {
   var path = require('path');
   const http = require('http');
   const server = http.createServer(app);
-
+  server.listen(port);
 
   app.set('views', path.join(__dirname, '/public/views'));
   app.set('view engine', 'hbs');
@@ -35,44 +35,44 @@ if (cluster.isMaster) {
   const io = require('socket.io')(server);
   const mult = io.of("/multiplayer");
 
+
   var socketsWaiting = [];
 
   mult.on("connection", (socket) => {
-    console.log("A user has connected!");
+    console.log("User " + socket.id + " has connected!");
 
-    socket.on('disconnect', () => {
-      console.log('disconnected!');
+    socket.on("disconnect", () => {
+      // If socket was waiting for opponent, remove from list
+      let index = socketsWaiting.indexOf(socket.id);
+      if (index > -1) {
+        socketsWaiting.splice(index, 1); 
+      }
+            
+      console.log("User " + socket.id + " disconnected");
     });
 
-    socket.on('join', () => {
-      var room = socketsWaiting.shift();
-      console.log(room);
-      socket.join(room);
-      mult.to(room).emit("HELLO");
-
-      io.to(room).emit("update_room", room);
-      // mult.emit("update_count", socketsWaiting.length)
-
+    socket.on("create", () => {
+      socketsWaiting.push(socket.id);
+      console.log(socketsWaiting);
+      mult.emit("update_count", socketsWaiting.length);
     });
 
-    socket.on('create', () => {
-      socketsWaiting.push(socket.id + "'s Room");
-      room = socket.id + "'s Room"
+    socket.on("join", () => {
+      console.log(socketsWaiting);
 
-      socket.join(room);
-      console.log(room);
+      let opponent = socketsWaiting.shift();
+      // Tells the player who joined to start
+      // Tells both players their opponent id
+      mult.to(socket.id).emit("start_game", opponent);
+      mult.to(opponent).emit("assign_opponent", socket.id);
+      mult.emit("update_count", socketsWaiting.length);
 
-      // mult.emit("update_count", socketsWaiting.length);
-      
     });
 
     socket.on('get_count', () => {
+      // Returns number of sockets waiting to be connected ("rooms")
       mult.emit("update_count", socketsWaiting.length);
-      
     });
   });
-
-
-  server.listen(port);
 }
 

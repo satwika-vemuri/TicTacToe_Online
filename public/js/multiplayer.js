@@ -1,51 +1,43 @@
-var socket;
-var connected;
-var player;
-var numOpenRooms;
+var opponent;
 var isTurn = false;
-var room;
+var numRooms = 0;
+const socket = io(":3000/multiplayer");
 
-// This socket instance is for room number updates in menu
-// NOT for gameplay
-// socket =  io(":3000/multiplayer");
+socket.emit("get_count");
 
-// socket.on("update_count", (numRooms) => {
-//     numOpenRooms = numRooms;
-//     const roomsTracker = document.getElementById("numRooms");
-//     roomsTracker.textContent = `Open Rooms: ${numRooms}`;
-// });
-
-// socket.emit("get_count");
-
-socket.on("update_room", (roomid) => {
-    console.log(roomid);
-    room = roomid;
+socket.on("connect_error", (err) => {
+    console.log(`connect_error due to ${err.message}`);
 });
 
-socket.on("HELLO", () => {
-    console.log("HELLO");
+socket.on("update_count", (numRooms) => {
+    numOpenRooms = numRooms;
+    const roomsTracker = document.getElementById("numRooms");
+    roomsTracker.textContent = `Open Rooms: ${numRooms}`;
 });
+
+socket.emit("get_count");
+
+socket.on("assign_opponent", (oppId) => {
+    opponent = oppId;
+});
+socket.on("start_game", (oppId) => {
+    opponent = oppId;
+    isTurn = true;
+});
+
+socket.on("your_turn", () => {
+    isTurn = true;
+};)
 
 function makeChoice(choice){
-    // if (!(numOpenRooms == 0 && choice == "join")) {
-        // socket.disconnect();
-        console.log(choice);
-        if (!connected) {
-            connected = true;
-            socket =  io(":3000/multiplayer");
-        }
-    
-        if (choice == "create") {
-            player = "X";
-            room = socket.id;
-        } else {
-            player = "O";
-        }
-        socket.emit(choice);
-        setupGame();
-    // }
+    if (choice == "create") {
+        player = "X";
+    } else {
+        player = "O";
+    }
+    socket.emit(choice);
+    setupGame();
 }
-
 
 function setupGame(){
     // get board hbs file from server and set to variable
@@ -82,7 +74,6 @@ function setupGame(){
     });
 }
 
-// Since multi and single both have this, perhaps we can move it to tictactoe.js
 function toLetters(boardArray){
     new_board = board_set_up();
     for(let r = 0; r < boardArray.length; r++){
@@ -102,6 +93,14 @@ function toLetters(boardArray){
 }
 
 function tileClick(clickedTile){
+    if (isTurn) {
+        update_board(clickedTile);
+    }
 
+}
 
+function update_board(clickedTile){
+    const element = document.getElementById(`${clickedTile[0]}${clickedTile[1]}`);
+    element.innerHTML = "<h1 class=\"fade-in\">" + player + "</h1>";
+    element.style.animation = "fadeInOpacity .25s 1 ease-in";
 }
