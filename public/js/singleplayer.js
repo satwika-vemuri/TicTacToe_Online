@@ -8,9 +8,10 @@ var turn;
 var letterToNumber = {"X": 1, "O":2};
 var playerPause;
 
-function setPlayer(choice){
+function setPlayer(choice, currentScore){
+    console.log("score" + currentScore);
     player = choice;
-    score = [0, 0];
+    score = currentScore;
     if (choice == "X"){
         computer = "O";
     }
@@ -18,10 +19,10 @@ function setPlayer(choice){
         computer = "X";
     }
     
-    setupGame();
+    setupGame(currentScore);
 }
 
-function setupGame(){
+function setupGame(currentScore){
     // get board hbs file from server and set to variable
     var boardHbs;
 
@@ -45,7 +46,7 @@ function setupGame(){
         var context = { title: 'Singleplayer', 
         styles: ["board"], 
         board: toLetters(boardArray),
-        score: [0, 0]
+        score: currentScore
         };
 
         // insert data into hbs 
@@ -129,6 +130,7 @@ function game_over(status){
         var context = { title: 'Gameover', 
         styles: ["gameOver"], 
         message: gameMessage,
+        score: score,
         };
 
         // insert data into hbs 
