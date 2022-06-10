@@ -50,6 +50,8 @@ td h1 {
 td {
 
     font-size:xx-large;
+    width:4.5em;
+    height:4.5em;
 }
 
 .fade-in {
