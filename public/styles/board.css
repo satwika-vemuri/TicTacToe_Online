@@ -21,8 +21,21 @@ p {
     margin: auto;
     padding: 0;
     border: none;
+    position: relative;
 }
 
+.stacked{
+    width: 100%;
+    display: center;
+    margin: auto;
+    padding: 0;
+    border: none;    
+    position: absolute;
+    background: lightgray;
+    z-index: 9;
+    
+    
+}
 
 table {
     table-layout: fixed;

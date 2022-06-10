@@ -6,16 +6,15 @@
 <link rel="stylesheet" href="/styles/{{this}}.css">
 {{/each}}
 
-<h1 >{{title}}</h1>
+<h1>{{title}}</h1>
 
 <p><b>Wins</b></p>
 <p id = "xscore">X Wins: {{score.[0]}}</p>
 <p id = "oscore">O Wins:  {{score.[1]}}</p>
 
 <div class="card">
-      <div id="popup" style="z-index:100;" ></div>
-
       <table class="table table-bordered">
+        <div class = "stacked" id = "popup" ></div>
         {{#each board}}
           <tr>
             <td class="tile text-center align-middle" onclick="tileClick([{{@index}},0])" id="{{@index}}0">
@@ -30,4 +29,5 @@
           </tr>
         {{/each}}
       </table>
+            
 </div>
