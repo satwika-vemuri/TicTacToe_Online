@@ -25,7 +25,6 @@ function setPlayer(choice, currentScore){
 function setupGame(currentScore){
     // get board hbs file from server and set to variable
     var boardHbs;
-
     boardArray = board_set_up();
     $.get("/../views/board.hbs",function( boardHbsFile){
         boardHbs = boardHbsFile;
@@ -46,7 +45,7 @@ function setupGame(currentScore){
         var context = { title: 'Singleplayer', 
         styles: ["board"], 
         board: toLetters(boardArray),
-        score: currentScore
+        score: [score[0], score[1]]
         };
 
         // insert data into hbs 
@@ -65,6 +64,7 @@ function tileClick(clickedTile){
             playerPause = true;
             // PLAYER'S TURN
             //player makes move
+            
             boardArray = make_move(letterToNumber[player], false, clickedTile, boardArray)[0];
             update_board(clickedTile, player);
     
@@ -72,7 +72,7 @@ function tileClick(clickedTile){
                 // AI'S TURN
     
                 // delay ai's turn in order to simulate thinking
-                var delayInMilliseconds = Math.floor(Math.random() * (700 - 300) + 300);
+                var delayInMilliseconds = Math.floor(Math.random() * (500 - 300) + 300);
                 setTimeout(function() {
                     
                     //ai makes move
@@ -105,39 +105,42 @@ function tileClick(clickedTile){
 
 function game_over(status){
     playerPause = true;
-    update_score();
 
-    var gameOverHbs;
-    $.get("/../views/gameOver.hbs",function(gameOverHbsFile){
-        gameOverHbs = gameOverHbsFile;
-
-        // convert hbs file to function
-        var gameOverHbsFunction = Handlebars.compile(gameOverHbs);
-
-        // data to insert into hbs
-
-        var gameMessage;
-        if (status==0){
-            gameMessage= "Tie!";
-        }
-        else if (status ===  letterToNumber[player]){ 
-            gameMessage =  "You win!";
-        }
-        else {
-            gameMessage = "You lost!";
-        }
-
-        var context = { title: 'Gameover', 
-        styles: ["gameOver"], 
-        message: gameMessage,
-        score: score,
-        };
-
-        // insert data into hbs 
-        var gameOver =  gameOverHbsFunction(context);
-
-        $("#popup").html(gameOver);  
-    });
+    // wait 1 second to show player game is over
+    var delayInMilliseconds = 1000; 
+    setTimeout(function() {
+        update_score();
+    
+        var gameOverHbs;
+        $.get("/../views/gameOver.hbs",function(gameOverHbsFile){
+            gameOverHbs = gameOverHbsFile;
+    
+            // convert hbs file to function
+            var gameOverHbsFunction = Handlebars.compile(gameOverHbs);
+    
+            // data to insert into hbs
+    
+            var gameMessage;
+            if (status==3){
+                gameMessage= "Tie!";
+            }
+            else if (status ===  letterToNumber[player]){ 
+                gameMessage =  "You win!";
+            }
+            else {
+                gameMessage = "You lost!";
+            }
+    
+            var context = {
+                message: gameMessage,
+            };
+    
+            // insert data into hbs 
+            var gameOver =  gameOverHbsFunction(context);
+    
+            $("#popup").html(gameOver);  
+        });
+        }, delayInMilliseconds);
 }
 
 function update_score(){
@@ -159,7 +162,8 @@ function update_score(){
 
 function update_board(clickedTile, player){
     const element = document.getElementById(`${clickedTile[0]}${clickedTile[1]}`);
-    element.textContent = player;
+    console.log("Player: " + player);
+    element.innerHTML = "<h1 class=\"fade-in\">" + player + "</h1>";
     element.style.animation = "fadeInOpacity .25s 1 ease-in";
 }
 
