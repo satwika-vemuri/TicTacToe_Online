@@ -44,7 +44,6 @@ function setupGame(){
 
         var context = { title: 'Singleplayer', 
         styles: ["board"], 
-        js: scripts,
         board: toLetters(boardArray),
         score: [0, 0]
         };
@@ -52,13 +51,12 @@ function setupGame(){
         // insert data into hbs 
         var board =  boardHbsFunction(context);
         // replace singleplayerChoose content in main with board content
-        $("#singleplayer").parent().html(board);  
+        $(".card").html(board);  
         playerPause = false;
     });
 }
 
 function tileClick(clickedTile){
-    console.log("In progress: " + playerPause);
     if (!playerPause){
         if(current_game_state(boardArray) == 0 // if game is unfinished
             && isMoveValid(clickedTile, boardArray)) // if clicked tile is empty
@@ -66,11 +64,6 @@ function tileClick(clickedTile){
             playerPause = true;
             // PLAYER'S TURN
             //player makes move
-            console.log("Player: " + player);
-            console.log("Computer: " + computer);
-            console.log("Letter to number player" + letterToNumber[player]);
-            console.log("Letter to number computer" + letterToNumber[computer]);
-    
             boardArray = make_move(letterToNumber[player], false, clickedTile, boardArray)[0];
             update_board(clickedTile, player);
     
@@ -107,15 +100,11 @@ function tileClick(clickedTile){
             game_over(current_game_state(boardArray));
         }
     }
-    else{
-        console.log('in progress');
-    }
 }
 
 function game_over(status){
     playerPause = true;
     update_score();
-    console.log("here");
 
     var gameOverHbs;
     $.get("/../views/gameOver.hbs",function(gameOverHbsFile){
@@ -145,7 +134,6 @@ function game_over(status){
         // insert data into hbs 
         var gameOver =  gameOverHbsFunction(context);
 
-        // replace playerChoose content in main with board content
         $("#popup").html(gameOver);  
     });
 }

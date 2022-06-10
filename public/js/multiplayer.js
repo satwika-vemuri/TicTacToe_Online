@@ -48,7 +48,7 @@ function setupGame(){
         var board =  boardHbsFunction(context);
 
         // replace multiplayerChoose content in main with board content
-        $("#multiplayer").parent().html(board);
+        $(".card").html(board);
 
         // Once O joins room, player X can make a move
         if (player == "O") {

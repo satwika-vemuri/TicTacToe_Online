@@ -152,8 +152,6 @@ function open_moves(board){
 
 // givenChoice has a two value array if the player clicked a tile 
 function make_move(turn, isAI, givenChoice, board){
-    console.log(board);
-    console.log("Trying to make move");
     let choice;
     if(isAI){
         choice = get_ai_choice(turn, board);
@@ -166,10 +164,8 @@ function make_move(turn, isAI, givenChoice, board){
         }
         */
     }
-    console.log(board);
-    console.log(choice);
+
     board[choice[0]][choice[1]] = turn;
-    console.log(board);
     return [board, choice];
     
 }
