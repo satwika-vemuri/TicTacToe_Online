@@ -39,7 +39,9 @@ nav{
     right: 0;
     bottom: 0;
     overflow: hidden;
-    background: #151a53;
+    /* background: #151a53; */
+    background-image: linear-gradient(#151a53, #0f0418);
+
     z-index: -10;
 }
 
