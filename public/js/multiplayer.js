@@ -1,4 +1,4 @@
-var opponent;
+var inGame = false;
 var isTurn = false;
 var numRooms = 0;
 const socket = io(":3000/multiplayer");
@@ -12,19 +12,22 @@ socket.on("connect_error", (err) => {
     console.log(`connect_error due to ${err.message}`);
 });
 
-socket.on("update_count", (numRooms) => {
-    numOpenRooms = numRooms;
-    const roomsTracker = document.getElementById("numRooms");
-    roomsTracker.textContent = `Open Rooms: ${numRooms}`;
+socket.on("update_count", (num) => {
+    if (!inGame) {
+        numRooms = num;
+        const roomsTracker = document.getElementById("numRooms");
+        roomsTracker.textContent = `Open Rooms: ${numRooms}`;
+    }
 });
 
 socket.emit("get_count");
 
 socket.on("assign_opponent", (oppId) => {
-    opponent = oppId;
+    inGame = true;
+    socket.emit("assign_opponent", oppId);
 });
-socket.on("start_game", (oppId) => {
-    opponent = oppId;
+socket.on("start_game", () => {
+    inGame = true;
     isTurn = true;
 });
 
@@ -37,13 +40,15 @@ socket.on("update_board", (clickedTile, symbol) => {
 });
 
 function makeChoice(choice){
-    if (choice == "create") {
-        player = "X";
-    } else {
-        player = "O";
+    if (!(numRooms == 0 && choice == "join")) {
+        if (choice == "create") {
+            player = "X";
+        } else {
+            player = "O";
+        }
+        socket.emit(choice);
+        setupGame();
     }
-    socket.emit(choice);
-    setupGame();
 }
 
 function setupGame(){
@@ -81,7 +86,7 @@ function setupGame(){
 function tileClick(clickedTile){
     if (isTurn) {
         update_board(clickedTile, player);
-        socket.emit("made_move", clickedTile, player, opponent, current_game_state(boardArray));
+        socket.emit("made_move", clickedTile, player, current_game_state(boardArray));
         isTurn = false;
     }
 
