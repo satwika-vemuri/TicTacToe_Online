@@ -39,6 +39,43 @@ socket.on("update_board", (clickedTile, symbol) => {
     update_board(clickedTile, symbol);
 });
 
+socket.on("opponent_disconnected", () => {
+    isTurn = false;
+    var delayInMilliseconds = 1000; 
+    setTimeout(function() {    
+        var exitNoticeHbs;
+        $.get("/../views/exitNotice.hbs", function(exitNoticeFile){
+    
+            $("#board").html(exitNoticeFile);  
+        });
+        }, delayInMilliseconds);
+});
+
+socket.on("game_over", (state) => {
+    // Receives game state (1 for player 1 win, 2 for player 2, 3 for tie)
+    // Menu pops up: ask for new game, 2 buttons to replay or quit
+    // If at least one selects quit, both must leave 
+    // Write socket.emit("quit"); if the player chooses to quit
+    // Write socket.emit("replay"); if the player chooses to replay
+
+});
+
+socket.on("opponent_quit", () => {
+    // Tell player that opponent quit, wait, and then quit
+    quit();
+});
+
+socket.on("opponent_replay", () => {
+    // The opponent chose to replay! (but did you?)
+});
+
+function quit() {
+    // Write your code to quit (probably just refreshing page or redireting to home page)
+    // Doing this will automatically disconnect the socket
+
+}
+
+
 function makeChoice(choice){
     if (!(numRooms == 0 && choice == "join")) {
         if (choice == "create") {

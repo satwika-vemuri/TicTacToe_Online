@@ -27,11 +27,12 @@ mult.on("connection", (socket) => {
   console.log("User " + socket.id + " has connected!");
 
   socket.on("disconnect", () => {
+    console.log("I left " + opponent);
     // If socket was waiting for opponent, remove from list
     let index = socketsWaiting.indexOf(socket.id);
     if (index > -1) {
       socketsWaiting.splice(index, 1); 
-    } else if (opponent) {
+    } else if (typeof opponent !== "undefined") {
       mult.to(opponent).emit("opponent_disconnected");
     }
           
@@ -49,8 +50,6 @@ mult.on("connection", (socket) => {
     // Tells the player who joined to start
     // Tells both players their opponent id
 
-    console.log("ME!: " + socket.id);
-    console.log(opponent);
     mult.to(socket.id).emit("start_game", opponent);
     mult.to(opponent).emit("assign_opponent", socket.id);
     mult.emit("update_count", socketsWaiting.length);
@@ -58,8 +57,6 @@ mult.on("connection", (socket) => {
   });
 
   socket.on("assign_opponent", (oppId) => {
-    console.log("ME!: " + socket.id);
-    console.log(oppId);
     opponent = oppId;
   });
 
@@ -76,8 +73,16 @@ mult.on("connection", (socket) => {
     if (currentState == 0) {
       mult.to(opponent).emit("your_turn");
     } else {
-      console.log(currentState);
+      mult.to(opponent).to(socket.id).emit("game_over", currentState);
     }
+  });
+
+  socket.on("quit", () => {
+    mult.to(opponent).emit("opponent_quit");
+  });
+
+  socket.on("replay", () => {
+    mult.to(opponent).emit("opponent_replay");
   });
 });
 
