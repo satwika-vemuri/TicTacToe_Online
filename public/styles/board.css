@@ -3,13 +3,23 @@ body {
 
 }
 
-h1 {
-    padding-top: 1em;
-    padding-bottom: .25em;
+h1.heading {
+    background-color:rgba(0, 0, 0, 0.55);
+    color: white;
+    margin-top: 1.25em;
+    margin-left: 2em;
+    margin-right: 2em;
+    margin-bottom: .5em;
+    padding: .25em;
+
+
 
 }
 
+
 p {
+    color: white;
+
     display:inline-block;
     padding-right: 1em;
 }
