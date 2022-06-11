@@ -41,14 +41,23 @@ socket.on("update_board", (clickedTile, symbol) => {
 
 socket.on("opponent_disconnected", () => {
     isTurn = false;
-    var delayInMilliseconds = 1000; 
+    var oneSecondDelay = 1000;  // one second
     setTimeout(function() {    
-        var exitNoticeHbs;
-        $.get("/../views/exitNotice.hbs", function(exitNoticeFile){
+        $.get("/../views/exitNotice.html", function(exitNotice){
     
-            $("#board").html(exitNoticeFile);  
+            $("#popup").html(exitNotice); // countdown originally says '3'
+            setTimeout(function() {
+                $("#countdown").text('2');  
+                setTimeout(function() {
+                    $("#countdown").text('1');  
+                    setTimeout(function() {
+                        $("#countdown").text('0');  
+                                
+                        }, oneSecondDelay);      
+                    }, oneSecondDelay);
+                }, oneSecondDelay);
         });
-        }, delayInMilliseconds);
+        }, oneSecondDelay);
 });
 
 socket.on("game_over", (state) => {
