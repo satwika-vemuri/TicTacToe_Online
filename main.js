@@ -1,5 +1,5 @@
 const express = require('express');
-const port = 3000;
+const port = process.env.PORT ||3000;
 
 const app = express();
 var path = require('path');
@@ -23,7 +23,7 @@ const mult = io.of("/multiplayer");
 var socketsWaiting = [];
 
 mult.on("connection", (socket) => {
-  var opponent;
+  var opponent; 
   console.log("User " + socket.id + " has connected!");
 
   socket.on("disconnect", () => {

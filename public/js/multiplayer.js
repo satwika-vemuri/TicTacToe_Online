@@ -1,7 +1,7 @@
 var inGame = false;
 var isTurn = false;
 var numRooms = 0;
-const socket = io(":3000/multiplayer");
+const socket = io(":" + process.env.PORT + "/multiplayer");
 
 var boardArray;
 
