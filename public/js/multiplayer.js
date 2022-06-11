@@ -3,6 +3,7 @@ var inGame = false;
 var isTurn = false;
 var numRooms = 0;
 const socket = io(`:${window.location.port}/multiplayer`);
+var currentOpenRooms = []
 
 var boardArray;
 
@@ -13,15 +14,17 @@ socket.on("connect_error", (err) => {
     console.log(`connect_error due to ${err.message}`);
 });
 
-socket.on("update_count", (num) => {
+socket.on("update_rooms", (socketsWaiting) => {
     if (!inGame) {
-        numRooms = num;
+        numRooms = socketsWaiting.length;
         const roomsTracker = document.getElementById("numRooms");
         roomsTracker.textContent = `Open Rooms: ${numRooms}`;
+
+        updateRoomTable();
     }
 });
 
-socket.emit("get_count");
+socket.emit("get_rooms");
 
 socket.on("assign_opponent", (oppId) => {
     inGame = true;
@@ -139,3 +142,9 @@ function tileClick(clickedTile){
 
 }
 
+function updateRoomTable(socketsWaiting) {
+    // Sockets waiting is a list of all the currently open room names
+    // Use currentOpenRooms to represent the current rooms on the client side
+    // Since it's a queue, if socketsWaiting[0] is in currentOpenRooms  delete the first row
+    // If the last element of socketsWaiting is not in currentOpenRooms add a new row
+}

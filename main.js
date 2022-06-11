@@ -60,9 +60,9 @@ mult.on("connection", (socket) => {
     opponent = oppId;
   });
 
-  socket.on('get_count', () => {
+  socket.on('get_rooms', () => {
     // Returns number of sockets waiting to be connected ("rooms")
-    mult.emit("update_count", socketsWaiting.length);
+    mult.emit("update_rooms", socketsWaiting);
   });
 
   socket.on("made_move", (clickedTile, player_symbol, currentState) => {
