@@ -1,5 +1,3 @@
-html{
-}
 .card {
     width: 30em;
     display: center;
@@ -9,12 +7,16 @@ html{
     text-align: center;
     background-color:#f7fbff;
     font-family: 'Mitr', sans-serif;
+    font-weight: 300;
+
 
 }
 
 nav{
     background-color:rgba(0, 0, 0, 0.55);
     font-family: 'Mitr', sans-serif;
+    font-weight: 300;
+
 
 }
 
