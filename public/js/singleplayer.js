@@ -68,7 +68,7 @@ function tileClick(clickedTile){
             boardArray = make_move(letterToNumber[player], false, clickedTile, boardArray)[0];
             update_board(clickedTile, player);
     
-            if (current_game_state(boardArray) ==0){ // if game is unfinished
+            if (current_game_state(boardArray) == 0){ // if game is unfinished
                 // AI'S TURN
     
                 // delay ai's turn in order to simulate thinking
@@ -95,10 +95,6 @@ function tileClick(clickedTile){
                 game_over(current_game_state(boardArray));
             }
             
-        }
-        else{
-            //game is finished
-            game_over(current_game_state(boardArray));
         }
     }
 }
