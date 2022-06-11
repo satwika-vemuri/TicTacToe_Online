@@ -78,24 +78,6 @@ function setupGame(){
     });
 }
 
-function toLetters(boardArray){
-    new_board = board_set_up();
-    for(let r = 0; r < boardArray.length; r++){
-        for(let c = 0; c < boardArray[0].length; c++){
-            if(boardArray[r][c] == 0){
-                new_board[r][c] = " ";
-            }
-            else if(boardArray[r][c] == 1){
-                new_board[r][c] = "X";
-            }
-            else{
-                new_board[r][c] == "O";
-            }
-        }
-    }
-    return new_board;
-}
-
 function tileClick(clickedTile){
     if (isTurn) {
         socket.emit("made_move", clickedTile, player, opponent, false);
@@ -104,9 +86,3 @@ function tileClick(clickedTile){
 
 }
 
-function update_board(clickedTile, symbol){
-    boardArray[clickedTile[0]][clickedTile[1]] = symbol;
-    const element = document.getElementById(`${clickedTile[0]}${clickedTile[1]}`);
-    element.innerHTML = "<h1 class=\"fade-in\">" + symbol + "</h1>";
-    element.style.animation = "fadeInOpacity .25s 1 ease-in";
-}

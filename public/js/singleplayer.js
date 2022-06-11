@@ -160,27 +160,3 @@ function update_score(){
     score[1] = o_score;
 }
 
-function update_board(clickedTile, player){
-    const element = document.getElementById(`${clickedTile[0]}${clickedTile[1]}`);
-    console.log("Player: " + player);
-    element.innerHTML = "<h1 class=\"fade-in\">" + player + "</h1>";
-    element.style.animation = "fadeInOpacity .25s 1 ease-in";
-}
-
-function toLetters(boardArray){
-    new_board = board_set_up();
-    for(let r = 0; r < boardArray.length; r++){
-        for(let c = 0; c < boardArray[0].length; c++){
-            if(boardArray[r][c] == 0){
-                new_board[r][c] = " ";
-            }
-            else if(boardArray[r][c] == 1){
-                new_board[r][c] = "X";
-            }
-            else{
-                new_board[r][c] == "O";
-            }
-        }
-    }
-    return new_board;
-}

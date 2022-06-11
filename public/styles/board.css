@@ -17,23 +17,18 @@ p {
 .card {
     width: 30em;
     height: 30em;
-    display: center;
     margin: auto;
     padding: 0;
     border: none;
     position: relative;
 }
 
-.stacked{
-    width: 100%;
-    display: center;
-    margin: auto;
-    padding: 0;
-    border: none;    
+#popup{
     position: absolute;
     background: lightgray;
-    z-index: 9;
-    
+    z-index: 10;
+    top:25%;
+    width:100%;
     
 }
 
