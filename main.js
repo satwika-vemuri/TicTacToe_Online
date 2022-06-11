@@ -49,6 +49,7 @@ if (cluster.isMaster) {
       }
             
       console.log("User " + socket.id + " disconnected");
+      console.log(oppId);
     });
 
     socket.on("create", () => {
@@ -74,10 +75,16 @@ if (cluster.isMaster) {
       mult.emit("update_count", socketsWaiting.length);
     });
 
-    socket.on("made_move", (clickedTile, player_symbol, oppId, isGameOver) => {
+    socket.on("made_move", (clickedTile, player_symbol, oppId, currentState) => {
       // Tells players to update boards based upon newly made move
       // Tells next player to go or not based on state of game
-      mult.to(socket.id).to(oppId).emit("update_board", clickedTile, player_symbol);
+      mult.to(oppId).emit("update_board", clickedTile, player_symbol);
+
+      if (currentState == 0) {
+        mult.to(oppId).emit("your_turn");
+      } else {
+        System.out.println(currentState);
+      }
     });
   });
 }

@@ -98,7 +98,8 @@ function toLetters(boardArray){
 
 function tileClick(clickedTile){
     if (isTurn) {
-        socket.emit("made_move", clickedTile, player, opponent, false);
+        update_board(clickedTile, player);
+        socket.emit("made_move", clickedTile, player, opponent, current_game_state(boardArray));
         isTurn = false;
     }
 
