@@ -8,20 +8,27 @@ html{
     margin-top: 7em;
     text-align: center;
     background-color:#f7fbff;
+    font-family: 'Mitr', sans-serif;
 
 }
 
 nav{
-    background-color:#f7fbff;
+    background-color:rgba(0, 0, 0, 0.55);
+    font-family: 'Mitr', sans-serif;
 
 }
 
 .navbar-light .navbar-nav .nav-link{
-    color:#38387a;
+    color:#ffe08c;
 }
 .btn {
     background-color: #6b6bff;
     border-color: #5252ed;
+}
+
+.btn:hover {
+    background-color: #43439a;
+    border-color: #343493;
 }
 
 
@@ -32,8 +39,12 @@ nav{
     right: 0;
     bottom: 0;
     overflow: hidden;
-    background: #ccd1d9;
-    height: 100vh;
-    width:100vw;
+    background: #151a53;
     z-index: -10;
 }
+
+#particles-js {
+    width: 100%;
+    height: 100%;
+    margin: 0 auto;
+  }
