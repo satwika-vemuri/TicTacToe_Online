@@ -8,11 +8,13 @@
 
 <h1>{{title}}</h1>
 
-<p><b>Wins</b></p>
-<p id = "xscore">X Wins: {{score.[0]}}</p>
-<p id = "oscore">O Wins:  {{score.[1]}}</p>
+<div class="score" style="width:100%;"> 
+  <p id = "xscore" style="margin-right:.5em;">X Wins: {{score.[0]}}</p>
+  <p id = "oscore" style="margin-left:.5em;" >O Wins:  {{score.[1]}}</p>
 
-<div class="card">
+</div>
+
+<div class="card" id="board">
       <table class="table table-bordered" style="vertical-align:middle">
         <div class = "stacked" id = "popup" ></div>
         {{#each board}}
