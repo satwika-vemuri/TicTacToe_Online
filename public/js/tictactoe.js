@@ -1,3 +1,4 @@
+var letterToNumber = {"X": 1, "O":2};
 // creates an empty board filled with 0s (empty spaces)
 function board_set_up(){
     const board = [];

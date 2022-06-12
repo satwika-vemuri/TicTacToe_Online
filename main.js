@@ -41,7 +41,7 @@ mult.on("connection", (socket) => {
 
   socket.on("create", () => {
     socketsWaiting.push(socket.id);
-    mult.emit("update_count", socketsWaiting.length);
+    mult.emit("update_rooms", socketsWaiting);
   });
 
   socket.on("join", () => {
@@ -52,7 +52,7 @@ mult.on("connection", (socket) => {
 
     mult.to(socket.id).emit("start_game", opponent);
     mult.to(opponent).emit("assign_opponent", socket.id);
-    mult.emit("update_count", socketsWaiting.length);
+    mult.emit("update_rooms", socketsWaiting);
 
   });
 
@@ -83,5 +83,9 @@ mult.on("connection", (socket) => {
 
   socket.on("replay", () => {
     mult.to(opponent).emit("opponent_replay");
+  });
+
+  socket.on("reset_game", () => {
+    mult.to(opponent).to(socket.id).emit("reset_game");
   });
 });
