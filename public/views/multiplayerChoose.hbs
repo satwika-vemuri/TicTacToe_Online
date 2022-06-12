@@ -5,11 +5,23 @@
   <div class="card-body">
     <h1>Multiplayer</h1>
     <p> Join an open room, or create your own.</p>
-    <p id="numRooms">Open Rooms: 0</p>
-    <table id = "openRooms"></table>
-    <button type="button" class="btn btn-primary" onclick="makeChoice('join')">Join Room</button>
-    <input type="text" id="joinRoomName" placeholder="Room name">
-    <button type="button" class="btn btn-primary" onclick="makeChoice('create')">Create Room</button>
-    <input type="text" id="createRoomName" placeholder="Room name">
+      <p id="numRooms">Open Rooms: 0</p>
+
+    <table class="options">
+      <tr>
+        <td><input type="text" id="createRoomName" placerholder=""></td>
+        <td><button type="button" class="btn btn-primary" onclick="makeChoice('create')">Create Room</button></td>
+      </tr>
+      <tr>
+      <td><input type="text" id="joinRoomName" placeholder=""></td>
+      <td><button type="button" class="btn btn-primary" onclick="makeChoice('join')">Join Room</button></td>
+      </tr>
+    </table>
+    <p id="warning"></p>
+    <h6 align="left">Public Rooms:</h6>
+    <table class = "roomTable table table-striped table-sm table-responsive-sm" id = "openRooms"></table>
+
+
+
   </div>
 </div>

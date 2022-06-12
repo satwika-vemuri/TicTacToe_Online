@@ -1,4 +1,4 @@
-
+var roomName;
 var inGame = false;
 var isTurn = false;
 var numRooms = 0;
@@ -12,6 +12,7 @@ var playerReplay;
 score = [0, 0];
 
 
+// document.getElementById("createRoomName").placeholder = socket.id;
 
 socket.emit("get_count");
 
@@ -19,10 +20,10 @@ socket.on("connect_error", (err) => {
     console.log(`connect_error due to ${err.message}`);
 });
 
-socket.on("update_rooms", (socketsWaiting) => {
+socket.on("update_rooms", (roomsWaiting) => {
     if (!inGame) {
-        console.log("here1");
-        numRooms = socketsWaiting.length;
+        openRoomNames = roomsWaiting;
+        numRooms = roomsWaiting.length;
         const roomsTracker = document.getElementById("numRooms");
         roomsTracker.textContent = `Open Rooms: ${numRooms}`;
         var table = document.getElementById("openRooms");
@@ -33,7 +34,6 @@ socket.on("update_rooms", (socketsWaiting) => {
             var row = table.insertRow(rowCount);
             var cell = row.insertCell(0);
             var newRow = document.createElement("tr");
-            console.log("name list size: " + openRoomNames.length);
             newRow.innerText = openRoomNames[count];
             cell.appendChild(newRow);
 
@@ -211,20 +211,28 @@ function removePopup() {
 
 
 function makeChoice(choice){
-    if (!(numRooms == 0 && choice == "join")) {
-        if (choice == "create") {
-            console.log("HERE");
-            player = "X";
-            const nameInput = document.getElementById("createRoomName").value;
-            console.log("inner text: " + nameInput);
-            openRoomNames.push(nameInput);
-            console.log(openRoomNames);
+    if (choice == "create") {
+        player = "X";
+        roomName = document.getElementById("createRoomName").value;
+        if (roomName == "") {
+            $("#warning").html("Please provide the room name.");
+        } else if (openRoomNames.includes(roomName)) {
+            $("#warning").html("Room already exists!");
         } else {
-            player = "O";
+            socket.emit("create", roomName);
+            setupGame();
         }
-        socket.emit(choice);
-        setupGame();
+    } else {
+        roomName = document.getElementById("joinRoomName").value;
+        if (openRoomNames.includes(roomName)) {
+            player = "O";
+            socket.emit("join", roomName);
+            setupGame();
+        } else {
+            $("#warning").html("Room does not exist.");
+        }
     }
+
 }
 
 function setupGame(){

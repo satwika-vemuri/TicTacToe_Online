@@ -5,4 +5,23 @@
     padding: 1em;
     margin-top: 7em;
     text-align: center;
+    
+}
+
+
+.options {
+    background: none;
+    margin-bottom: 1em;
+}
+
+.roomTable {
+    width: 100%;
+    margin-top: 1em;
+    background: none;
+    overflow: 10px;
+
+}
+
+#warning {
+    color: #d43d3d;
 }

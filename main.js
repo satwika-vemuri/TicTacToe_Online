@@ -21,6 +21,8 @@ const mult = io.of("/multiplayer");
 
 
 var socketsWaiting = [];
+var roomsWaiting = [];
+
 
 mult.on("connection", (socket) => {
   var opponent; 
@@ -39,20 +41,25 @@ mult.on("connection", (socket) => {
     console.log("User " + socket.id + " disconnected");
   });
 
-  socket.on("create", () => {
+  socket.on("create", (roomName) => {
     socketsWaiting.push(socket.id);
-    mult.emit("update_rooms", socketsWaiting);
+    roomsWaiting.push(roomName);
+
+    console.log("Rooms waiting: " + roomsWaiting);
+    mult.emit("update_rooms", roomsWaiting);
   });
 
-  socket.on("join", () => {
-
-    opponent = socketsWaiting.shift();
+  socket.on("join", (roomName) => {
     // Tells the player who joined to start
     // Tells both players their opponent id
+    oppIdIndex = roomsWaiting.indexOf(roomName);
+
+    opponent = socketsWaiting.splice(oppIdIndex, 1);
+    roomsWaiting.splice(oppIdIndex, 1);
 
     mult.to(socket.id).emit("start_game", opponent);
     mult.to(opponent).emit("assign_opponent", socket.id);
-    mult.emit("update_rooms", socketsWaiting);
+    mult.emit("update_rooms", roomsWaiting);
 
   });
 
@@ -62,7 +69,7 @@ mult.on("connection", (socket) => {
 
   socket.on('get_rooms', () => {
     // Returns number of sockets waiting to be connected ("rooms")
-    mult.emit("update_rooms", socketsWaiting);
+    mult.emit("update_rooms", roomsWaiting);
   });
 
   socket.on("made_move", (clickedTile, player_symbol, currentState) => {
