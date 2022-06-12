@@ -5,7 +5,6 @@ var computer;
 var boardArray;
 var score;
 var turn;
-var letterToNumber = {"X": 1, "O":2};
 var playerPause;
 
 function setPlayer(choice, currentScore){
@@ -45,7 +44,7 @@ function setupGame(currentScore){
         var context = { title: 'Singleplayer', 
         styles: ["board"], 
         board: toLetters(boardArray),
-        score: [score[0], score[1]]
+        score: [score[0], score[1]],
         };
 
         // insert data into hbs 
@@ -58,6 +57,7 @@ function setupGame(currentScore){
 
 function tileClick(clickedTile){
     if (!playerPause){
+        console.log(boardArray);
         if(current_game_state(boardArray) == 0 // if game is unfinished
             && isMoveValid(clickedTile, boardArray)) // if clicked tile is empty
             { 
@@ -156,3 +156,6 @@ function update_score(){
     score[1] = o_score;
 }
 
+function closeGameOver(){
+    $("#popup").remove();
+}

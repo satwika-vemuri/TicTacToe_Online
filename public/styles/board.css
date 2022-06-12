@@ -18,10 +18,12 @@ h1.heading {
 
 
 p {
-    color: white;
-
     display:inline-block;
     padding-right: 1em;
+}
+
+div.subhead{
+    color:white;
 }
 
 .card {
