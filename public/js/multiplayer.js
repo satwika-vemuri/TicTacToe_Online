@@ -78,7 +78,7 @@ socket.on("opponent_disconnected", () => {
                     $("#countdown").text('1');  
                     setTimeout(function() {
                         $("#countdown").text('0');  
-                            location.reload();;
+                            location.reload();
                         }, oneSecondDelay);      
                     }, oneSecondDelay);
                 }, oneSecondDelay);
@@ -131,9 +131,9 @@ socket.on("opponent_quit", () => {
     opponentReplay = false;
     $("#oppdecision").html("Opponent: Quit");  
     $("#oppdecision").css("color", "#d43d3d");  
-    $("#bottom").html("<p>Quitting...<p>");  
+    $("#bottom").html("<p>Closing screen...<p>");  
     removePopup();
-    }
+}
 
 });
 
@@ -193,8 +193,8 @@ function playAgain(replay) {
             $("#pdecision").css("color", "#d43d3d");  
             $("#bottom").html("<p>Quitting...<p>");  
 
-            removePopup();
             socket.emit("quit");
+            location.reload();
         }
     }
 
@@ -236,6 +236,8 @@ function makeChoice(choice){
 }
 
 function setupGame(){
+    $("#publicRooms").remove();
+
     inGame = true;
     // get board hbs file from server and set to variable
     let t;
@@ -269,6 +271,10 @@ function setupGame(){
         var board =  boardHbsFunction(context);
 
         // replace multiplayerChoose content in main with board content
+        $(".card").removeClass("leftcard");
+        $(".card").removeClass("flex-child");
+
+
         $(".card").html(board);
 
         // Once O joins room, player X can make a move

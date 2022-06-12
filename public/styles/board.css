@@ -11,8 +11,7 @@ h1.heading {
     margin-right: 2em;
     margin-bottom: .5em;
     padding: .25em;
-
-
+    width: 7em;
 
 }
 
@@ -34,6 +33,7 @@ div.subhead{
     border: none;
     position: relative;
     background:none;
+
 }
 
 #popup{
@@ -44,6 +44,7 @@ div.subhead{
     background-color: #f7fbff;
     
 }
+
 
 table {
     table-layout: fixed;
