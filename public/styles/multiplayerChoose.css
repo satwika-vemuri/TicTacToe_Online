@@ -1,13 +1,22 @@
 .card {
-    width: 30em;
+    width: 20em;
     display: center;
-    margin: auto;
     padding: 1em;
     margin-top: 7em;
     text-align: center;
     
 }
 
+
+.leftcard{
+    margin-left: 10em;
+    margin-right: 2.5em;
+}
+
+.rightcard{
+    margin-left: 2.5em;
+    margin-right: 10em;
+}
 
 .options {
     background: none;
@@ -24,4 +33,21 @@
 
 #warning {
     color: #d43d3d;
+}
+
+.flex-container {
+    display: flex;
+}
+
+.flex-child {
+    flex: 1;
+    border: 2px rgba(0,0,0,0);
+}  
+
+.flex-child:first-child {
+    margin-right: 10px;
+} 
+
+.scroll {
+    overflow-y: scroll;
 }
