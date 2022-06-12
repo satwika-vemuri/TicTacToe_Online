@@ -26,6 +26,7 @@ nav{
 .btn {
     background-color: #6b6bff;
     border-color: #5252ed;
+    margin:1em;
 }
 
 .btn:hover {

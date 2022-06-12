@@ -3,7 +3,7 @@ var inGame = false;
 var isTurn = false;
 var numRooms = 0;
 const socket = io(`:${window.location.port}/multiplayer`);
-var currentOpenRooms = []
+var openRoomNames = [];
 
 var boardArray;
 
@@ -16,19 +16,24 @@ socket.on("connect_error", (err) => {
 
 socket.on("update_rooms", (socketsWaiting) => {
     if (!inGame) {
+        console.log("here1");
         numRooms = socketsWaiting.length;
         const roomsTracker = document.getElementById("numRooms");
         roomsTracker.textContent = `Open Rooms: ${numRooms}`;
         var table = document.getElementById("openRooms");
         var rowCount = table.rows.length;
-        while(numRooms > (rowCount - 1)){
+
+        let count = 0;
+        while(numRooms > rowCount){
             var row = table.insertRow(rowCount);
-            var cell1 = row.insertCell(0);
-            var element1 = document.createElement("tr");
-            element1.innerText = "room";
-            cell1.appendChild(element1);
+            var cell = row.insertCell(0);
+            var newRow = document.createElement("tr");
+            console.log("name list size: " + openRoomNames.length);
+            newRow.innerText = openRoomNames[count];
+            cell.appendChild(newRow);
+
             rowCount = table.rows.length;
-            console.log(rowCount);
+            count++;
         }
     }
     updateRoomTable();
@@ -102,7 +107,12 @@ function quit() {
 function makeChoice(choice){
     if (!(numRooms == 0 && choice == "join")) {
         if (choice == "create") {
+            console.log("HERE");
             player = "X";
+            const nameInput = document.getElementById("createRoomName").value;
+            console.log("inner text: " + nameInput);
+            openRoomNames.push(nameInput);
+            console.log(openRoomNames);
         } else {
             player = "O";
         }
