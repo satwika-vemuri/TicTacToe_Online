@@ -157,5 +157,5 @@ function update_score(){
 }
 
 function closeGameOver(){
-    $("#popup").remove();
+    $("#popup").html("");
 }

@@ -198,7 +198,7 @@ function playAgain(replay) {
 function removePopup() {
     var delayInMilliseconds = 3000; 
     setTimeout(function() {
-        $("#popup").remove();
+    $("#popup").html("");
     }, delayInMilliseconds);
 
 }
