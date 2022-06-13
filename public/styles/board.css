@@ -35,20 +35,13 @@ div.subhead{
 
 }
 
-<<<<<<< HEAD
-=======
-#roomname{
-    color:white;
-    display:right;
-}
->>>>>>> 784a87a3d43218004c9a712c6ded2bae0e74960b
 
 #popup{
     position: absolute;
     z-index: 10;
     top:25%;
     width:100%;
-    background-color: #f7fbff;
+    background-color: #c9e1f9;
     
 }
 
