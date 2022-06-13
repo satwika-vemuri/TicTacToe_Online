@@ -13,6 +13,8 @@
 
 h1 {
     font-size: 1.75rem;
+    border-radius:.5rem;
+
 }
 
 .navbar-nav {
