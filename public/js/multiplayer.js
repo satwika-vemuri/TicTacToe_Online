@@ -1,3 +1,7 @@
+var letterToNumber = {"X": 1, "O":2};
+var numberToLetter = {1 : "X", 2 : "O"};
+
+
 var roomName;
 var inGame = false;
 var isTurn = false;
@@ -7,8 +11,11 @@ var openRoomNames = [];
 
 var boardArray;
 
-var opponentReplay;
-var playerReplay;
+// 0 : hasn't made a choice
+// 1 : quit
+// 2 : replay
+var opponentReplay = 0;
+var playerReplay = 0;
 score = [0, 0];
 
 
@@ -46,9 +53,9 @@ socket.on("your_turn", () => {
     $("#turn").html("Turn: "+ player + " (You)");
 });
 
-socket.on("update_board", (clickedTile, symbol) => {
-    boardArray[clickedTile[0]][clickedTile[1]] = symbol;
-    update_board(clickedTile, symbol);
+socket.on("update_board", (clickedTile, playerNumber) => {
+    boardArray[clickedTile[0]][clickedTile[1]] = playerNumber;
+    update_board(clickedTile, numberToLetter[playerNumber]);
 });
 
 socket.on("opponent_disconnected", () => {
@@ -73,14 +80,13 @@ socket.on("opponent_disconnected", () => {
 });
 
 socket.on("game_over", (state) => {
+    console.log("TIE?: " + state);
     update_score(state);
     $("#turn").html("Game over!");
     isTurn = false;
     var delayInMilliseconds = 1000; 
     setTimeout(function() {
-    
-        var gameOverHbs;
-        $.get("/../views/gameOverMulti.hbs",function(gameOverMultiFile){
+            $.get("/../views/gameOverMulti.hbs",function(gameOverMultiFile){
             gameOverMultiHbs = gameOverMultiFile;
     
             // convert hbs file to function
@@ -91,7 +97,7 @@ socket.on("game_over", (state) => {
             if (state==3){
                 gameMessage= "Tie!";
             }
-            else if (state ===  letterToNumber[player]){ 
+            else if (player ==  state){ 
 
                 gameMessage =  "You win!";
             }
@@ -113,8 +119,8 @@ socket.on("game_over", (state) => {
 });
 
 socket.on("opponent_quit", () => {
-    if (playerReplay !== false ) {
-    opponentReplay = false;
+    if (playerReplay !== 1 ) {
+    opponentReplay = 1;
     $("#oppdecision").html("Opponent: Quit");  
     $("#oppdecision").css("color", "#d43d3d");  
     $("#bottom").html("<p>Closing screen...<p>");  
@@ -124,11 +130,11 @@ socket.on("opponent_quit", () => {
 });
 
 socket.on("opponent_replay", () => {
-    if (playerReplay !== false) {
-        opponentReplay = true;
+    if (playerReplay !== 1) {
+        opponentReplay = 2;
         $("#oppdecision").html("Opponent: Replay");  
         $("#oppdecision").css("color", "#2d8a5d");  
-        if (playerReplay == true) {
+        if (playerReplay == 2) {
             socket.emit("reset_game");
         }
     }
@@ -161,19 +167,19 @@ socket.on("reset_game", () => {
         $("#turn").html("Turn: X (You)");   
     }
 
-    playerReplay = false;
-    opponentReplay = false;
+    playerReplay = 0;
+    opponentReplay = 0;
 
 
 });
 
 function playAgain(replay) {
-    if (opponentReplay !== false) {
+    if (opponentReplay !== 1) {
         playerReplay = replay;
         if (replay) {
             $("#pdecision").html("You: Replay");
             $("#pdecision").css("color", "#2d8a5d");  
-            if (opponentReplay) {
+            if (opponentReplay ==2) {
                 removePopup();
                 socket.emit("reset_game");
             }
@@ -274,9 +280,9 @@ function setupGame(){
 
 function tileClick(clickedTile){
     if (isTurn &&  is_move_valid(clickedTile, boardArray)){
-        boardArray[clickedTile[0]][clickedTile[1]] = player;
-        update_board(clickedTile, player);
-        socket.emit("made_move", clickedTile, player, current_game_state(boardArray));
+        boardArray[clickedTile[0]][clickedTile[1]] = letterToNumber[player];
+        
+        socket.emit("made_move", clickedTile, letterToNumber[player], current_game_state(boardArray));
         if (player == "X") {
             $("#turn").html("Turn: O (Opponent)");
         } else {
@@ -330,15 +336,14 @@ function is_move_valid(choice, board){
 
 
 function update_score(state){
-    console.log("The one that one is " + state);
     x_score = score[0];
     o_score = score[1];
-    if(state == "X"){
+    if(state == 1){
         x_score += 1;
         const xscore = document.getElementById("xscore");
         xscore.innerHTML = `X Wins: ${x_score}`;
     }
-    else if(state =="O"){
+    else if(state == 2){
         o_score += 1;
         const oscore = document.getElementById("oscore");
         oscore.innerHTML = `O Wins: ${o_score}`;

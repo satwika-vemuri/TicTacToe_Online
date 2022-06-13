@@ -1,4 +1,5 @@
 var letterToNumber = {"X": 1, "O":2};
+
 // creates an empty board filled with 0s (empty spaces)
 function board_set_up(){
     const board = [];
@@ -234,7 +235,6 @@ function toLetters(boardArray){
 
 function update_board(clickedTile, player){
     const element = document.getElementById(`${clickedTile[0]}${clickedTile[1]}`);
-    console.log("Player: " + player);
     element.innerHTML = "<h1 class=\"fade-in\">" + player + "</h1>";
     element.style.animation = "fadeInOpacity .25s 1 ease-in";
 }

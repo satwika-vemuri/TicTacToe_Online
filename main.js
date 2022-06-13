@@ -79,7 +79,7 @@ mult.on("connection", (socket) => {
   socket.on("made_move", (clickedTile, player_symbol, currentState) => {
     // Tells players to update boards based upon newly made move
     // Tells next player to go or not based on state of game
-    mult.to(opponent).emit("update_board", clickedTile, player_symbol);
+    mult.to(opponent).to(socket.id).emit("update_board", clickedTile, player_symbol);
 
     if (currentState == 0) {
       mult.to(opponent).emit("your_turn");

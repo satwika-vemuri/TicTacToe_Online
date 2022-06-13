@@ -1,4 +1,4 @@
-console.log("Running");
+var letterToNumber = {"X": 1, "O":2};
 
 var player;
 var computer;
