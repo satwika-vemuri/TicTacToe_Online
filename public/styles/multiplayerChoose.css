@@ -1,7 +1,20 @@
-
 .flex-container {
     display: flex;
     flex-direction:column;
+}
+
+.card{
+    margin:3em auto;
+
+}
+
+.card.leftcard{
+    margin-bottom:0em;
+}
+
+#private{
+    justify-self:left;
+
 }
 @media screen and (min-width: 800px) {
 
@@ -9,10 +22,23 @@
         flex-direction: row;
     }
 
-    .rightcard{
+
+    .card.rightcard{
+        margin-left:1em;
+        max-height:10em;
         max-width: 15em;
         align-content:space-around;
+
     }
+    .card{
+        margin-top:7em;
+    }
+    
+    .card.leftcard{
+        margin-right:1em;
+        margin-bottom:7em;
+    }
+    
     
 }
 

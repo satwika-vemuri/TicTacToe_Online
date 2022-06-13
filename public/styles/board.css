@@ -9,7 +9,6 @@ h1.heading {
     margin-top: 1.25em;
     margin-left: 2em;
     margin-right: 2em;
-    margin-bottom: .5em;
     padding: .25em;
     width: 7em;
 
@@ -26,8 +25,8 @@ div.subhead{
 }
 
 .card {
-    width: 30em;
-    height: 30em;
+    height: auto;
+    width: 90%;
     margin: auto;
     padding: 0;
     border: none;
@@ -35,6 +34,7 @@ div.subhead{
     background:none;
 
 }
+
 
 #popup{
     position: absolute;
@@ -47,10 +47,9 @@ div.subhead{
 
 
 #board {
-    width: 30em;
-    height: 30em;
-
-    padding: 1em;
+    width: 100%;
+    height: 23em;
+    max-width:25em;
     text-align: center;    
 }
 
@@ -103,4 +102,12 @@ p{
 
     display:inline-block;
     width:fit-content;
+}
+
+@media screen and (min-width: 400) {
+    #board{
+        padding: 1em;
+        height:25em;
+
+    }
 }
