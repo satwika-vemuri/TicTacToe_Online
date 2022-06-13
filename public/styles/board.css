@@ -24,7 +24,7 @@ p {
     padding-right: 1em;
 }
 
-.card {
+#board {
     width: 30em;
     height: 30em;
     margin: auto;
