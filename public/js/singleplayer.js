@@ -8,7 +8,6 @@ var turn;
 var playerPause;
 
 function setPlayer(choice, currentScore){
-    console.log("score" + currentScore);
     player = choice;
     score = currentScore;
     if (choice == "X"){
@@ -64,7 +63,6 @@ function setupGame(currentScore){
 
 function tileClick(clickedTile){
     if (!playerPause){
-        console.log(boardArray);
         if(current_game_state(boardArray) == 0 // if game is unfinished
             && isMoveValid(clickedTile, boardArray)) // if clicked tile is empty
             { 

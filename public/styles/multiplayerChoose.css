@@ -56,6 +56,10 @@
 
 }
 
+.roomRow:hover {
+    background-color: #c4daf0;
+}
+
 .roomname{
     color:white;
     text-align: right !important;

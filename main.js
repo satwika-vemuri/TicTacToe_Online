@@ -30,7 +30,6 @@ mult.on("connection", (socket) => {
   console.log("User " + socket.id + " has connected!");
 
   socket.on("disconnect", () => {
-    console.log("I left " + opponent);
     // If socket was waiting for opponent, remove from list
     let index = socketsWaiting.indexOf(socket.id);
     if (index > -1) {
@@ -53,7 +52,7 @@ mult.on("connection", (socket) => {
     private.push(checkBox);
 
     console.log("Rooms waiting: " + roomsWaiting);
-    mult.emit("update_rooms", roomsWaiting);
+    mult.emit("update_rooms", roomsWaiting, private);
   });
 
   socket.on("join", (roomName) => {

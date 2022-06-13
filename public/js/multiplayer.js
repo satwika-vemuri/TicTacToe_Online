@@ -80,7 +80,6 @@ socket.on("opponent_disconnected", () => {
 });
 
 socket.on("game_over", (state) => {
-    console.log("TIE?: " + state);
     update_score(state);
     $("#turn").html("Game over!");
     isTurn = false;
@@ -212,7 +211,6 @@ function makeChoice(choice){
         player = "X";
         roomName = document.getElementById("createRoomName").value;
         checkBox = document.getElementById("private").checked;
-        console.log("value " + checkBox);
         if (roomName == "") {
             $("#warning").html("Please provide the room name.");
         } else if (openRoomNames.includes(roomName)) {
@@ -300,15 +298,19 @@ function tileClick(clickedTile){
 function updateRoomTable(roomsWaiting, private) {
     var table = document.getElementById("openRooms");
     if (openRoomNames.length == 0) {
-        console.log(roomsWaiting);
         for (let i = 0; i < roomsWaiting.length; i++ ){
             if(private[i] == false){
                 var row = table.insertRow(-1);
                 var cell = row.insertCell(0);
                 var newRow = document.createElement("tr");
                 row.id = "roomRow" + roomsWaiting[i];
+                $(`#${row.id}`).attr('onClick', `pickPublicRoom("${roomsWaiting[i]}");`);
+                $(`#${row.id}`).attr('class', 'roomRow');
+
                 newRow.innerText = roomsWaiting[i];
                 cell.appendChild(newRow);
+
+
             }
         }
     } else {
@@ -321,20 +323,28 @@ function updateRoomTable(roomsWaiting, private) {
             }
         }
     
-        if ((roomsWaiting.length > openRoomNames.length)  && (private[i] == false)) {
+        if ((roomsWaiting.length > openRoomNames.length)  && (private[roomsWaiting.length - 1] == false)) {
             let latestRoom = roomsWaiting[roomsWaiting.length - 1];
 
             var row = table.insertRow(-1);
             var cell = row.insertCell(0);
             var newRow = document.createElement("tr");
             row.id = "roomRow" + latestRoom;
+            $(`#${row.id}`).attr('onClick', `pickPublicRoom("${roomsWaiting[roomsWaiting.length - 1]}");`);
+            $(`#${row.id}`).attr('class', 'roomRow');
+
+
             newRow.innerText = latestRoom;
             cell.appendChild(newRow);
+
         }
     }
 
 }
 
+function pickPublicRoom(room) {
+    $("#joinRoomName").val(room);
+}
 
 function is_move_valid(choice, board){
     return (board[choice[0]][choice[1]] == 0);
@@ -357,5 +367,4 @@ function update_score(state){
     score[0] = x_score;
     score[1] = o_score;
 
-    console.log(score);
 }
