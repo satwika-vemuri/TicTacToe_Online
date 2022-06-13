@@ -22,32 +22,18 @@ socket.on("connect_error", (err) => {
 
 socket.on("update_rooms", (roomsWaiting) => {
     if (!inGame) {
-        openRoomNames = roomsWaiting;
         numRooms = roomsWaiting.length;
         const roomsTracker = document.getElementById("numRooms");
         roomsTracker.textContent = `Open Rooms: ${numRooms}`;
-        var table = document.getElementById("openRooms");
-        var rowCount = table.rows.length;
-
-        let count = 0;
-        while(numRooms > rowCount){
-            var row = table.insertRow(rowCount);
-            var cell = row.insertCell(0);
-            var newRow = document.createElement("tr");
-            newRow.innerText = openRoomNames[count];
-            cell.appendChild(newRow);
-
-            rowCount = table.rows.length;
-            count++;
-        }
+        updateRoomTable(roomsWaiting);
+        openRoomNames = roomsWaiting;
     }
-    updateRoomTable();
 });
 
 socket.emit("get_rooms");
 
 socket.on("assign_opponent", (oppId) => {
-    $("#turn").html("Turn: X");
+    $("#turn").html("Turn: X (You)");
     isTurn = true;
     socket.emit("assign_opponent", oppId);
 });
@@ -57,7 +43,7 @@ socket.on("start_game", () => {
 
 socket.on("your_turn", () => {
     isTurn = true;
-    $("#turn").html("Turn: "+ player);
+    $("#turn").html("Turn: "+ player + " (You)");
 });
 
 socket.on("update_board", (clickedTile, symbol) => {
@@ -169,9 +155,12 @@ socket.on("reset_game", () => {
         isTurn = false;
     }
     inGame = false;
+    if (player == "O") {
+        $("#turn").html("Turn: X (Opponent)");   
+    } else {
+        $("#turn").html("Turn: X (You)");   
 
-    $("#turn").html("Turn: X");
-
+    }
 
 
 });
@@ -287,20 +276,49 @@ function tileClick(clickedTile){
         update_board(clickedTile, player);
         socket.emit("made_move", clickedTile, player, current_game_state(boardArray));
         if (player == "X") {
-            $("#turn").html("Turn: O");
+            $("#turn").html("Turn: O (Opponent)");
         } else {
-            $("#turn").html("Turn: X");
+            $("#turn").html("Turn: X (You)");
         }
         isTurn = false;
     }
 
 }
 
-function updateRoomTable(socketsWaiting) {
-    // Sockets waiting is a list of all the currently open room names
-    // Use currentOpenRooms to represent the current rooms on the client side
-    // Since it's a queue, if socketsWaiting[0] is in currentOpenRooms  delete the first row
-    // If the last element of socketsWaiting is not in currentOpenRooms add a new row
+function updateRoomTable(roomsWaiting) {
+    var table = document.getElementById("openRooms");
+    if (openRoomNames.length == 0) {
+        console.log(roomsWaiting);
+        for (let i = 0; i < roomsWaiting.length; i++ ){
+            var row = table.insertRow(-1);
+            var cell = row.insertCell(0);
+            var newRow = document.createElement("tr");
+            row.id = "roomRow" + roomsWaiting[i];
+            newRow.innerText = roomsWaiting[i];
+            cell.appendChild(newRow);
+        }
+    } else {
+        for (let i = 0; i < openRoomNames.length; i++ ){
+            if (!roomsWaiting.includes(openRoomNames[i])) {
+                $("#roomRow" + openRoomNames[i]).remove();
+                openRoomNames.splice(i, 1); 
+                i--;
+    
+            }
+        }
+    
+        if (roomsWaiting.length > openRoomNames.length) {
+            let latestRoom = roomsWaiting[roomsWaiting.length - 1];
+
+            var row = table.insertRow(-1);
+            var cell = row.insertCell(0);
+            var newRow = document.createElement("tr");
+            row.id = "roomRow" + latestRoom;
+            newRow.innerText = latestRoom;
+            cell.appendChild(newRow);
+        }
+    }
+
 }
 
 

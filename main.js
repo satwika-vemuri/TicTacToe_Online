@@ -34,6 +34,10 @@ mult.on("connection", (socket) => {
     let index = socketsWaiting.indexOf(socket.id);
     if (index > -1) {
       socketsWaiting.splice(index, 1); 
+      roomsWaiting.splice(index, 1); 
+      mult.emit("update_rooms", roomsWaiting);
+
+
     } else if (typeof opponent !== "undefined") {
       mult.to(opponent).emit("opponent_disconnected");
     }
