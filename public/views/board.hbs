@@ -6,9 +6,12 @@
 <link rel="stylesheet" href="/styles/{{this}}.css">
 {{/each}}
 
-<h1 class="heading">{{title}}</h1>
+<h1 class="heading" align="center">{{title}}</h1>
 
-<div class="score" style="width:100%;"> 
+<div class="subhead" style="width:100%;"> 
+{{#if turn}}
+<h5 id = "turn">Turn : {{turn}}</h5>
+{{/if}}
   <p id = "xscore" style="margin-right:.5em;">X Wins: {{score.[0]}}</p>
   <p id = "oscore" style="margin-left:.5em;" >O Wins:  {{score.[1]}}</p>
 

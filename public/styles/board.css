@@ -11,20 +11,21 @@ h1.heading {
     margin-right: 2em;
     margin-bottom: .5em;
     padding: .25em;
-
-
+    width: 7em;
 
 }
 
 
 p {
-    color: white;
-
     display:inline-block;
     padding-right: 1em;
 }
 
-#board {
+div.subhead{
+    color:white;
+}
+
+.card {
     width: 30em;
     height: 30em;
     margin: auto;
@@ -32,6 +33,7 @@ p {
     border: none;
     position: relative;
     background:none;
+
 }
 
 #popup{
@@ -42,6 +44,7 @@ p {
     background-color: #f7fbff;
     
 }
+
 
 table {
     table-layout: fixed;

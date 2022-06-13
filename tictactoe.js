@@ -1,3 +1,5 @@
+var letterToNumber = {"X": 1, "O":2};
+
 function board_set_up(){
     const board = [];
     for(let i = 0; i < 3; i++){

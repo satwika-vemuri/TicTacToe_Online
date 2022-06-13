@@ -1,12 +1,18 @@
-
+var roomName;
 var inGame = false;
 var isTurn = false;
 var numRooms = 0;
 const socket = io(`:${window.location.port}/multiplayer`);
-var currentOpenRooms = []
+var openRoomNames = [];
 
 var boardArray;
 
+var opponentReplay;
+var playerReplay;
+score = [0, 0];
+
+
+// document.getElementById("createRoomName").placeholder = socket.id;
 
 socket.emit("get_count");
 
@@ -14,21 +20,25 @@ socket.on("connect_error", (err) => {
     console.log(`connect_error due to ${err.message}`);
 });
 
-socket.on("update_rooms", (socketsWaiting) => {
+socket.on("update_rooms", (roomsWaiting) => {
     if (!inGame) {
-        numRooms = socketsWaiting.length;
+        openRoomNames = roomsWaiting;
+        numRooms = roomsWaiting.length;
         const roomsTracker = document.getElementById("numRooms");
         roomsTracker.textContent = `Open Rooms: ${numRooms}`;
         var table = document.getElementById("openRooms");
         var rowCount = table.rows.length;
-        while(numRooms > (rowCount - 1)){
+
+        let count = 0;
+        while(numRooms > rowCount){
             var row = table.insertRow(rowCount);
-            var cell1 = row.insertCell(0);
-            var element1 = document.createElement("tr");
-            element1.innerText = "room";
-            cell1.appendChild(element1);
+            var cell = row.insertCell(0);
+            var newRow = document.createElement("tr");
+            newRow.innerText = openRoomNames[count];
+            cell.appendChild(newRow);
+
             rowCount = table.rows.length;
-            console.log(rowCount);
+            count++;
         }
     }
     updateRoomTable();
@@ -37,19 +47,21 @@ socket.on("update_rooms", (socketsWaiting) => {
 socket.emit("get_rooms");
 
 socket.on("assign_opponent", (oppId) => {
-    inGame = true;
+    $("#turn").html("Turn: X");
+    isTurn = true;
     socket.emit("assign_opponent", oppId);
 });
 socket.on("start_game", () => {
-    inGame = true;
-    isTurn = true;
+    isTurn = false;
 });
 
 socket.on("your_turn", () => {
     isTurn = true;
+    $("#turn").html("Turn: "+ player);
 });
 
 socket.on("update_board", (clickedTile, symbol) => {
+    boardArray[clickedTile[0]][clickedTile[1]] = symbol;
     update_board(clickedTile, symbol);
 });
 
@@ -66,7 +78,7 @@ socket.on("opponent_disconnected", () => {
                     $("#countdown").text('1');  
                     setTimeout(function() {
                         $("#countdown").text('0');  
-                                
+                            location.reload();
                         }, oneSecondDelay);      
                     }, oneSecondDelay);
                 }, oneSecondDelay);
@@ -75,44 +87,165 @@ socket.on("opponent_disconnected", () => {
 });
 
 socket.on("game_over", (state) => {
-    // Receives game state (1 for player 1 win, 2 for player 2, 3 for tie)
-    // Menu pops up: ask for new game, 2 buttons to replay or quit
-    // If at least one selects quit, both must leave 
-    // Write socket.emit("quit"); if the player chooses to quit
-    // Write socket.emit("replay"); if the player chooses to replay
+    update_score(state);
+    $("#turn").html("Game over!");
+    isTurn = false;
+    var delayInMilliseconds = 1000; 
+    setTimeout(function() {
+    
+        var gameOverHbs;
+        $.get("/../views/gameOverMulti.hbs",function(gameOverMultiFile){
+            gameOverMultiHbs = gameOverMultiFile;
+    
+            // convert hbs file to function
+            var gameOverMultiHbsFunction = Handlebars.compile(gameOverMultiHbs);
+    
+            // data to insert into hbs
+            var gameMessage;
+            if (state==3){
+                gameMessage= "Tie!";
+            }
+            else if (state ===  letterToNumber[player]){ 
+
+                gameMessage =  "You win!";
+            }
+            else {
+                gameMessage = "You lost!";
+            }
+    
+            var context = {
+                message: gameMessage,
+            };
+    
+            // insert data into hbs 
+            var gameOverMulti =  gameOverMultiHbsFunction(context);
+    
+            $("#popup").html(gameOverMulti);  
+        });
+        }, delayInMilliseconds);
 
 });
 
 socket.on("opponent_quit", () => {
-    // Tell player that opponent quit, wait, and then quit
-    quit();
+    if (playerReplay !== false ) {
+    opponentReplay = false;
+    $("#oppdecision").html("Opponent: Quit");  
+    $("#oppdecision").css("color", "#d43d3d");  
+    $("#bottom").html("<p>Closing screen...<p>");  
+    removePopup();
+}
+
 });
 
 socket.on("opponent_replay", () => {
-    // The opponent chose to replay! (but did you?)
+    if (playerReplay !== false) {
+        opponentReplay = true;
+        $("#oppdecision").html("Opponent: Replay");  
+        $("#oppdecision").css("color", "#2d8a5d");  
+        if (playerReplay == true) {
+            $("#bottom").html("<p>Restarting game...<p>");  
+            removePopup();
+            socket.emit("reset_game");
+        }
+    }
+
 });
 
-function quit() {
-    // Write your code to quit (probably just refreshing page or redireting to home page)
-    // Doing this will automatically disconnect the socket
+socket.on("reset_game", () => {
+    $("#bottom").html("<p>Restarting game...<p>");  
+    boardArray = board_set_up();
+
+
+    for(let i = 0; i < 3; i++){
+        for(let j = 0; j < 3; j++){
+            const element = document.getElementById(`${i}${j}`);
+            element.innerHTML = "<h1 class=\"fade-in\"> </h1>";
+        }
+    }
+
+    if (player == "X") {
+        isTurn = true;
+    } else {
+        isTurn = false;
+    }
+    inGame = false;
+
+    $("#turn").html("Turn: X");
+
+
+
+});
+
+function playAgain(replay) {
+    if (opponentReplay !== false) {
+        playerReplay = replay;
+        if (replay) {
+            $("#pdecision").html("You: Replay");
+            $("#pdecision").css("color", "#2d8a5d");  
+            if (opponentReplay) {
+                removePopup();
+                socket.emit("reset_game");
+            }
+            $("#bottom").html("<p>Waiting...<p>");  
+            socket.emit("replay");
+        } else {
+            $("#pdecision").html("You: Quit");
+            $("#pdecision").css("color", "#d43d3d");  
+            $("#bottom").html("<p>Quitting...<p>");  
+
+            socket.emit("quit");
+            location.reload();
+        }
+    }
+
+
+}
+
+function removePopup() {
+    var delayInMilliseconds = 3000; 
+    setTimeout(function() {
+    $("#popup").html("");
+    }, delayInMilliseconds);
 
 }
 
 
 function makeChoice(choice){
-    if (!(numRooms == 0 && choice == "join")) {
-        if (choice == "create") {
-            player = "X";
+    if (choice == "create") {
+        player = "X";
+        roomName = document.getElementById("createRoomName").value;
+        if (roomName == "") {
+            $("#warning").html("Please provide the room name.");
+        } else if (openRoomNames.includes(roomName)) {
+            $("#warning").html("Room already exists!");
         } else {
-            player = "O";
+            socket.emit("create", roomName);
+            setupGame();
         }
-        socket.emit(choice);
-        setupGame();
+    } else {
+        roomName = document.getElementById("joinRoomName").value;
+        if (openRoomNames.includes(roomName)) {
+            player = "O";
+            socket.emit("join", roomName);
+            setupGame();
+        } else {
+            $("#warning").html("Room does not exist.");
+        }
     }
+
 }
 
 function setupGame(){
+    $("#publicRooms").remove();
+
+    inGame = true;
     // get board hbs file from server and set to variable
+    let t;
+    if (player == "X") {
+        t = "Waiting for opponent to join..."
+    } else {
+        t = "X";
+    }
     var boardHbs;
     $.get("/../views/board.hbs",function( boardHbsFile){
         boardHbs = boardHbsFile;
@@ -130,13 +263,18 @@ function setupGame(){
         var context = { title: 'Multiplayer', 
         styles: ["board"], 
         board: toLetters(boardArray),
-        score: [0, 0]
+        score: [0, 0],
+        turn: t
         };
 
         // insert data into hbs 
         var board =  boardHbsFunction(context);
 
         // replace multiplayerChoose content in main with board content
+        $(".card").removeClass("leftcard");
+        $(".card").removeClass("flex-child");
+
+
         $(".card").html(board);
 
         // Once O joins room, player X can make a move
@@ -144,18 +282,49 @@ function setupGame(){
 }
 
 function tileClick(clickedTile){
-    if (isTurn) {
+    if (isTurn &&  is_move_valid(clickedTile, boardArray)){
+        boardArray[clickedTile[0]][clickedTile[1]] = player;
         update_board(clickedTile, player);
         socket.emit("made_move", clickedTile, player, current_game_state(boardArray));
+        if (player == "X") {
+            $("#turn").html("Turn: O");
+        } else {
+            $("#turn").html("Turn: X");
+        }
         isTurn = false;
     }
 
 }
 
 function updateRoomTable(socketsWaiting) {
-    console.log(socketsWaiting);
     // Sockets waiting is a list of all the currently open room names
     // Use currentOpenRooms to represent the current rooms on the client side
     // Since it's a queue, if socketsWaiting[0] is in currentOpenRooms  delete the first row
     // If the last element of socketsWaiting is not in currentOpenRooms add a new row
+}
+
+
+function is_move_valid(choice, board){
+    return (board[choice[0]][choice[1]] == 0);
+}
+
+
+function update_score(state){
+    console.log("The one that one is " + state);
+    x_score = score[0];
+    o_score = score[1];
+    if(state == "X"){
+        x_score += 1;
+        const xscore = document.getElementById("xscore");
+        xscore.innerHTML = `X Wins: ${x_score}`;
+    }
+    else if(state =="O"){
+        o_score += 1;
+        const oscore = document.getElementById("oscore");
+        oscore.innerHTML = `O Wins: ${o_score}`;
+    }
+    score[0] = x_score;
+    score[1] = o_score;
+
+    console.log(score);
 }
