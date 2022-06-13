@@ -97,7 +97,7 @@ socket.on("game_over", (state) => {
             if (state==3){
                 gameMessage= "Tie!";
             }
-            else if (player ==  state){ 
+            else if (letterToNumber[player] ==  state){ 
 
                 gameMessage =  "You win!";
             }
