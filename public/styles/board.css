@@ -36,6 +36,11 @@ div.subhead{
 
 }
 
+#roomname{
+    color:white;
+    display:right;
+}
+
 #popup{
     position: absolute;
     z-index: 10;
