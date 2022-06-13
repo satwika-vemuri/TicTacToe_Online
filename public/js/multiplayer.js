@@ -129,8 +129,6 @@ socket.on("opponent_replay", () => {
         $("#oppdecision").html("Opponent: Replay");  
         $("#oppdecision").css("color", "#2d8a5d");  
         if (playerReplay == true) {
-            $("#bottom").html("<p>Restarting game...<p>");  
-            removePopup();
             socket.emit("reset_game");
         }
     }
@@ -138,7 +136,9 @@ socket.on("opponent_replay", () => {
 });
 
 socket.on("reset_game", () => {
-    $("#bottom").html("<p>Restarting game...<p>");  
+    $("#bottom").html("<p>Restarting game...<p>");  4
+    removePopup();
+
     boardArray = board_set_up();
 
 
@@ -154,13 +154,15 @@ socket.on("reset_game", () => {
     } else {
         isTurn = false;
     }
-    inGame = false;
+    inGame = true;
     if (player == "O") {
         $("#turn").html("Turn: X (Opponent)");   
     } else {
         $("#turn").html("Turn: X (You)");   
-
     }
+
+    playerReplay = false;
+    opponentReplay = false;
 
 
 });
@@ -191,7 +193,7 @@ function playAgain(replay) {
 }
 
 function removePopup() {
-    var delayInMilliseconds = 3000; 
+    var delayInMilliseconds = 1000; 
     setTimeout(function() {
     $("#popup").html("");
     }, delayInMilliseconds);
@@ -233,7 +235,7 @@ function setupGame(){
     if (player == "X") {
         t = "Waiting for opponent to join..."
     } else {
-        t = "X";
+        t = "X (Opponent)";
     }
     var boardHbs;
     $.get("/../views/board.hbs",function( boardHbsFile){
@@ -278,7 +280,7 @@ function tileClick(clickedTile){
         if (player == "X") {
             $("#turn").html("Turn: O (Opponent)");
         } else {
-            $("#turn").html("Turn: X (You)");
+            $("#turn").html("Turn: X (Opponent)");
         }
         isTurn = false;
     }
