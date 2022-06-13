@@ -56,17 +56,21 @@
 
 }
 
+.roomname{
+    color:white;
+    text-align: right !important;
+    display:right;
+}
+
 #warning {
     color: #d43d3d;
 }
-
 
 
 .flex-child {
     flex: 1;
     border: 2px rgba(0,0,0,0);
 }  
-
 
 .scroll {
     overflow-y: scroll;

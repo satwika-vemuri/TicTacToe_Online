@@ -263,12 +263,11 @@ function setupGame(){
         styles: ["board"], 
         board: toLetters(boardArray),
         score: [0, 0],
-        turn: t
+        turn: t,
+        roomName: roomName
         };
-
         // insert data into hbs 
         var board =  boardHbsFunction(context);
-
         // replace multiplayerChoose content in main with board content
         $(".card").removeClass("leftcard");
         $(".card").removeClass("flex-child");
@@ -278,6 +277,9 @@ function setupGame(){
 
         // Once O joins room, player X can make a move
     });
+
+    //$(".roomname").html(roomName);  
+
 }
 
 function tileClick(clickedTile){
