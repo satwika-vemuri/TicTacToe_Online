@@ -55,7 +55,7 @@ table {
 
 }
 
-td {
+td h1{
     width: calc(100% / 3);
     height: calc(100% / 3);
 
@@ -67,7 +67,7 @@ td {
 
 
 
-td h1 {
+td {
     vertical-align: middle;
 }
 

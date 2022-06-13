@@ -1,26 +1,32 @@
 .card {
-    width: 20em;
-    display: center;
+    width: 30em;
     padding: 1em;
-    margin-top: 7em;
-    text-align: center;
+    text-align: center;    
+}
+.flex-container {
+    display: flex;
+    flex-direction:column;
+}
+@media screen and (min-width: 800px) {
+
+    .flex-container{
+        flex-direction: row;
+    }
+
+    .rightcard{
+        max-width: 15em;
+        align-content:space-around;
+    }
     
-}
-
-
-.leftcard{
-    margin-left: 10em;
-    margin-right: 2.5em;
-}
-
-.rightcard{
-    margin-left: 2.5em;
-    margin-right: 10em;
+    td{
+        display:inline-block;
+    }
 }
 
 .options {
     background: none;
-    margin-bottom: 1em;
+    justify-content:center;
+    text-align: center;
 }
 
 .roomTable {
@@ -35,19 +41,18 @@
     color: #d43d3d;
 }
 
-.flex-container {
-    display: flex;
-}
+
 
 .flex-child {
     flex: 1;
     border: 2px rgba(0,0,0,0);
 }  
 
-.flex-child:first-child {
-    margin-right: 10px;
-} 
 
 .scroll {
     overflow-y: scroll;
+}
+
+td {
+    display: block;
 }
