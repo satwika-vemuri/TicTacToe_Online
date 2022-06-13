@@ -25,7 +25,13 @@ function setupGame(currentScore){
     // get board hbs file from server and set to variable
     var boardHbs;
     boardArray = board_set_up();
-    $.get("/../views/board.hbs",function( boardHbsFile){
+    let turn;
+    if (player == "X") {
+        turn = "X (You)";
+    } else {
+        turn = "O (Opponent)";
+    }
+     $.get("/../views/board.hbs",function( boardHbsFile){
         boardHbs = boardHbsFile;
 
         // convert hbs file to function
@@ -45,6 +51,7 @@ function setupGame(currentScore){
         styles: ["board"], 
         board: toLetters(boardArray),
         score: [score[0], score[1]],
+        turn: turn
         };
 
         // insert data into hbs 
@@ -62,7 +69,9 @@ function tileClick(clickedTile){
             && isMoveValid(clickedTile, boardArray)) // if clicked tile is empty
             { 
             playerPause = true;
+
             // PLAYER'S TURN
+            
             //player makes move
             
             boardArray = make_move(letterToNumber[player], false, clickedTile, boardArray)[0];
@@ -70,7 +79,8 @@ function tileClick(clickedTile){
     
             if (current_game_state(boardArray) == 0){ // if game is unfinished
                 // AI'S TURN
-    
+                $("#turn").html("Turn: "+ computer + " (Opponent)");
+
                 // delay ai's turn in order to simulate thinking
                 var delayInMilliseconds = Math.floor(Math.random() * (500 - 300) + 300);
                 setTimeout(function() {
@@ -88,8 +98,16 @@ function tileClick(clickedTile){
 
                     if(current_game_state(boardArray) != 0){ 
                         game_over(current_game_state(boardArray))
+                        $("#turn").html("Game over!");
+                    } else {
+                        setTimeout(function() {
+                            $("#turn").html("Turn: "+ player + " (You)");
+                        }, delayInMilliseconds);
+
                     }
+
                 }, delayInMilliseconds);
+
             }
             else {
                 game_over(current_game_state(boardArray));
