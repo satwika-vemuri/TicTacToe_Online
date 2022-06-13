@@ -27,12 +27,12 @@ socket.on("connect_error", (err) => {
     console.log(`connect_error due to ${err.message}`);
 });
 
-socket.on("update_rooms", (roomsWaiting) => {
+socket.on("update_rooms", (roomsWaiting, private) => {
     if (!inGame) {
         numRooms = roomsWaiting.length;
         const roomsTracker = document.getElementById("numRooms");
         roomsTracker.textContent = `Open Rooms: ${numRooms}`;
-        updateRoomTable(roomsWaiting);
+        updateRoomTable(roomsWaiting, private);
         openRoomNames = roomsWaiting;
     }
 });
@@ -211,12 +211,14 @@ function makeChoice(choice){
     if (choice == "create") {
         player = "X";
         roomName = document.getElementById("createRoomName").value;
+        checkBox = document.getElementById("private").checked;
+        console.log("value " + checkBox);
         if (roomName == "") {
             $("#warning").html("Please provide the room name.");
         } else if (openRoomNames.includes(roomName)) {
             $("#warning").html("Room already exists!");
         } else {
-            socket.emit("create", roomName);
+            socket.emit("create", roomName, checkBox);
             setupGame();
         }
     } else {
@@ -293,17 +295,19 @@ function tileClick(clickedTile){
 
 }
 
-function updateRoomTable(roomsWaiting) {
+function updateRoomTable(roomsWaiting, private) {
     var table = document.getElementById("openRooms");
     if (openRoomNames.length == 0) {
         console.log(roomsWaiting);
         for (let i = 0; i < roomsWaiting.length; i++ ){
-            var row = table.insertRow(-1);
-            var cell = row.insertCell(0);
-            var newRow = document.createElement("tr");
-            row.id = "roomRow" + roomsWaiting[i];
-            newRow.innerText = roomsWaiting[i];
-            cell.appendChild(newRow);
+            if(private[i] == false){
+                var row = table.insertRow(-1);
+                var cell = row.insertCell(0);
+                var newRow = document.createElement("tr");
+                row.id = "roomRow" + roomsWaiting[i];
+                newRow.innerText = roomsWaiting[i];
+                cell.appendChild(newRow);
+            }
         }
     } else {
         for (let i = 0; i < openRoomNames.length; i++ ){
@@ -315,7 +319,7 @@ function updateRoomTable(roomsWaiting) {
             }
         }
     
-        if (roomsWaiting.length > openRoomNames.length) {
+        if ((roomsWaiting.length > openRoomNames.length)  && (private[i] == false)) {
             let latestRoom = roomsWaiting[roomsWaiting.length - 1];
 
             var row = table.insertRow(-1);
