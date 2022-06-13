@@ -46,6 +46,14 @@ div.subhead{
 }
 
 
+#board {
+    width: 30em;
+    height: 30em;
+
+    padding: 1em;
+    text-align: center;    
+}
+
 table {
     table-layout: fixed;
     width: 100%;
@@ -56,19 +64,16 @@ table {
 }
 
 td h1{
-    width: calc(100% / 3);
-    height: calc(100% / 3);
-
     font-size:xx-large;
-    width:4.5em;
-    height:4.5em;
-    background-color: #f7fbff;
+    background-color: none;
 }
 
 
 
 td {
     vertical-align: middle;
+    width: calc(100% / 3);
+    height: calc(100% / 3);
 }
 
 .tile:hover {

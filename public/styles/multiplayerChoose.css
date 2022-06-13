@@ -1,8 +1,4 @@
-.card {
-    width: 30em;
-    padding: 1em;
-    text-align: center;    
-}
+
 .flex-container {
     display: flex;
     flex-direction:column;
@@ -18,9 +14,6 @@
         align-content:space-around;
     }
     
-    td{
-        display:inline-block;
-    }
 }
 
 .options {
@@ -53,6 +46,3 @@
     overflow-y: scroll;
 }
 
-td {
-    display: block;
-}
