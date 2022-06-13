@@ -8,20 +8,14 @@
     <h1>Multiplayer</h1>
     <p> Join an open room, or create your own.</p>
       <p id="numRooms">Open Rooms: 0</p>
-
-    <table class="options">
-      <tbody align="center">
-        <tr>
-          <td><input type="text" id="createRoomName" placerholder=""></td>
-          <td><button type="button" class="btn btn-primary" onclick="makeChoice('create')">Create Room</button></td>
-        </tr>
-        <tr>
-        <td><input type="text" id="joinRoomName" placeholder=""></td>
-        <td><button type="button" class="btn btn-primary" onclick="makeChoice('join')">Join Room</button></td>
-        </tr>
-      </tbody>
-    </table>
-    <p id="warning"></p>
+  <br>
+    <div class="options">
+      <input type="text" class="form-control" id="createRoomName" placeholder="Enter a room name" maxlength="25">
+      <button type="button" class="btn btn-primary" onclick="makeChoice('create')">Create Room</button>
+      <input type="text" class="form-control" id="joinRoomName" placeholder="Enter a room name" maxlength="25">
+      <button type="button" class="btn btn-primary" onclick="makeChoice('join')">Join Room</button>
+      <p id="warning"></p>
+    </div>
   </div>
 </div>
 
