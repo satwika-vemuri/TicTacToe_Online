@@ -11,6 +11,18 @@ h1.heading {
 
 }
 
+h4.heading {
+    text-align: center;
+    color: white;
+    width: 30em;
+    margin: 0 auto;
+    font-family: 'Mitr', sans-serif;
+    font-size:10px;
+    font-weight: 10;
+    margin-top: 1em;
+
+}
+
 .card {
     margin-top: 2em;
 
